@@ -7,52 +7,53 @@ import java.util.Date;
  */
 public class OrderItemEntity extends Entity {
 
+    private String orderItemId;
+
     private String oid;
 
     private String authUid;
+
+    private String op;
+
+    private String sid;
+
+    private String barcode;
+
+    private String spuId;
+
+    private String spuName;
+
+    private String skuName;
+
+    private String cover;
 
     private String tid;
 
     private String iuid;
 
-    private int vip;
+    private String commentId;
 
-    private int orderStatus;
+    private int num;
 
-    private String code;
+    private int unitPrice;
 
-    private String op;
+    private int code;
 
-    private String check;
+    private int rNum;
 
-    private int total;
+    private int evaStatus;
 
-    private int goodsTotal;
+    private Date createTime;
 
-    private int cashback;
+    private Date updateTime;
 
-    private int bonus;
+    public String getorderItemId() {
+        return orderItemId;
+    }
 
-    private String couponCode;
-
-    private int couponDiscount;
-
-    private int freight;
-
-    private int freightDiscount;
-
-    private int payment;
-
-    private int userBalanceConsume;
-
-    private int discount;
-
-    private int actualPayment;
-
-    private Date payAt;
-
-    private String payOrd;
-
+    public void setorderItemId(String orderItemId) {
+        this.orderItemId = orderItemId;
+    }
 
     public String getOid() {
         return oid;
@@ -68,6 +69,62 @@ public class OrderItemEntity extends Entity {
 
     public void setAuthUid(String authUid) {
         this.authUid = authUid;
+    }
+
+    public String getOp() {
+        return op;
+    }
+
+    public void setOp(String op) {
+        this.op = op;
+    }
+
+    public String getSid() {
+        return sid;
+    }
+
+    public void setSid(String sid) {
+        this.sid = sid;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    public String getSpuId() {
+        return spuId;
+    }
+
+    public void setSpuId(String spuId) {
+        this.spuId = spuId;
+    }
+
+    public String getSpuName() {
+        return spuName;
+    }
+
+    public void setSpuName(String spuName) {
+        this.spuName = spuName;
+    }
+
+    public String getSkuName() {
+        return skuName;
+    }
+
+    public void setSkuName(String skuName) {
+        this.skuName = skuName;
+    }
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 
     public String getTid() {
@@ -86,156 +143,68 @@ public class OrderItemEntity extends Entity {
         this.iuid = iuid;
     }
 
-    public int getVip() {
-        return vip;
+    public String getCommentId() {
+        return commentId;
     }
 
-    public void setVip(int vip) {
-        this.vip = vip;
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
     }
 
-    public int getOrderStatus() {
-        return orderStatus;
+    public int getNum() {
+        return num;
     }
 
-    public void setOrderStatus(int orderStatus) {
-        this.orderStatus = orderStatus;
+    public void setNum(int num) {
+        this.num = num;
     }
 
-    public String getCode() {
+    public int getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(int unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
-    public String getOp() {
-        return op;
+    public int getrNum() {
+        return rNum;
     }
 
-    public void setOp(String op) {
-        this.op = op;
+    public void setrNum(int rNum) {
+        this.rNum = rNum;
     }
 
-    public String getCheck() {
-        return check;
+    public int getEvaStatus() {
+        return evaStatus;
     }
 
-    public void setCheck(String check) {
-        this.check = check;
+    public void setEvaStatus(int evaStatus) {
+        this.evaStatus = evaStatus;
     }
 
-    public int getTotal() {
-        return total;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setTotal(int total) {
-        this.total = total;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public int getGoodsTotal() {
-        return goodsTotal;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setGoodsTotal(int goodsTotal) {
-        this.goodsTotal = goodsTotal;
-    }
-
-    public int getCashback() {
-        return cashback;
-    }
-
-    public void setCashback(int cashback) {
-        this.cashback = cashback;
-    }
-
-    public int getBonus() {
-        return bonus;
-    }
-
-    public void setBonus(int bonus) {
-        this.bonus = bonus;
-    }
-
-    public String getCouponCode() {
-        return couponCode;
-    }
-
-    public void setCouponCode(String couponCode) {
-        this.couponCode = couponCode;
-    }
-
-    public int getCouponDiscount() {
-        return couponDiscount;
-    }
-
-    public void setCouponDiscount(int couponDiscount) {
-        this.couponDiscount = couponDiscount;
-    }
-
-    public int getFreight() {
-        return freight;
-    }
-
-    public void setFreight(int freight) {
-        this.freight = freight;
-    }
-
-    public int getFreightDiscount() {
-        return freightDiscount;
-    }
-
-    public void setFreightDiscount(int freightDiscount) {
-        this.freightDiscount = freightDiscount;
-    }
-
-    public int getPayment() {
-        return payment;
-    }
-
-    public void setPayment(int payment) {
-        this.payment = payment;
-    }
-
-    public int getUserBalanceConsume() {
-        return userBalanceConsume;
-    }
-
-    public void setUserBalanceConsume(int userBalanceConsume) {
-        this.userBalanceConsume = userBalanceConsume;
-    }
-
-    public int getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(int discount) {
-        this.discount = discount;
-    }
-
-    public int getActualPayment() {
-        return actualPayment;
-    }
-
-    public void setActualPayment(int actualPayment) {
-        this.actualPayment = actualPayment;
-    }
-
-    public Date getPayAt() {
-        return payAt;
-    }
-
-    public void setPayAt(Date payAt) {
-        this.payAt = payAt;
-    }
-
-    public String getPayOrd() {
-        return payOrd;
-    }
-
-    public void setPayOrd(String payOrd) {
-        this.payOrd = payOrd;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
 }

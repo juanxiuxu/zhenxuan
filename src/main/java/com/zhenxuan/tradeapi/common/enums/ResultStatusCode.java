@@ -43,7 +43,11 @@ public enum ResultStatusCode {
     GOODS_DATA_ERROR(6003, "goods data error"),
     NO_GOODS_FOR_SKUID(6004, "no goods for this skuId"),
     GOODS_STOCK_NOT_ENOUGH(6005, "goods stock not enough"),
-    GOODS_NOT_SHOW(6006, "goods not show");
+    GOODS_NOT_SHOW(6006, "goods not show"),
+    CREATE_ORDER_FAILED(6007, "CREATE_ORDER_FAILED"),
+
+    //运输错误 7000开头
+    OUT_OF_DELIVERY_AREA(6007, "goods is out of delivery area");
 
     public final int code;
     public final String desc;
