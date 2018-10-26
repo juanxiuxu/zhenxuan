@@ -1,17 +1,19 @@
 package com.zhenxuan.tradeapi.service.impl;
 
+import com.amazonaws.services.glue.model.Order;
 import com.zhenxuan.tradeapi.common.enums.Member;
 import com.zhenxuan.tradeapi.common.ZXException;
+import com.zhenxuan.tradeapi.common.enums.OrderStatus;
 import com.zhenxuan.tradeapi.common.enums.ResultStatusCode;
-import com.zhenxuan.tradeapi.entity.GoodsSkuItem;
-import com.zhenxuan.tradeapi.entity.GoodsSpuItem;
-import com.zhenxuan.tradeapi.entity.UserAuthEntity;
+import com.zhenxuan.tradeapi.entity.*;
 import com.zhenxuan.tradeapi.mapper.OrderItemMapper;
 import com.zhenxuan.tradeapi.mapper.OrderMapper;
+import com.zhenxuan.tradeapi.mapper.ProductMapper;
 import com.zhenxuan.tradeapi.mapper.UserAuthMapper;
 import com.zhenxuan.tradeapi.service.OrderService;
 import com.zhenxuan.tradeapi.service.UserService;
 import com.zhenxuan.tradeapi.thirdparty.DynamoDbService;
+import com.zhenxuan.tradeapi.utils.GlobalIdUtil;
 import com.zhenxuan.tradeapi.vo.CreateOrderDirectReqVo;
 import com.zhenxuan.tradeapi.vo.CreateOrderDirectRespVo;
 import org.apache.commons.collections4.CollectionUtils;
@@ -20,8 +22,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -43,9 +48,16 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderItemMapper orderItemMapper;
 
+    @Autowired
+    private ProductMapper productMapper;
+
     @Override
     public CreateOrderDirectRespVo createOrderDirect(CreateOrderDirectReqVo createOrderDirectReqVo) {
         UserAuthEntity authEntity = userService.verifyAuthUid(createOrderDirectReqVo.getAuthUid());
+
+        CreateOrderDirectRespVo orderDirectRespVo = new CreateOrderDirectRespVo();
+
+        int purchaseCount = createOrderDirectReqVo.getPurchaseCount();
 
         String skuId = createOrderDirectReqVo.getSkuId();
         GoodsSpuItem.SkuInfo skuInfo = getOrderItemBySkuId(skuId);
@@ -57,18 +69,97 @@ public class OrderServiceImpl implements OrderService {
         if (!skuInfo.isShow()) {
             throw new ZXException(ResultStatusCode.GOODS_NOT_SHOW);
         }
-        if (skuInfo.getStockCount() < createOrderDirectReqVo.getPurchseCount()) {
+        if (skuInfo.getStockCount() < purchaseCount) {
             throw new ZXException(ResultStatusCode.GOODS_STOCK_NOT_ENOUGH);
         }
 
+        String spuId = parseSpuIdFromSkuId(skuId);
+        GoodsSpuItem spuItem = dynamoDbService.read(GoodsSpuItem.class, spuId, "0", true);
+        if (spuItem == null) {
+            logger.error("spu item not found. spudId:{}", spuId);
+            throw new ZXException(ResultStatusCode.SPUITEM_NOT_FOUND);
+        }
 
-        return null;
+        List<Map<String, Integer>> shipinfos = spuItem.getShippingInfos();
+        int freight = CalculateFreight(createOrderDirectReqVo, shipinfos);
+        float price = skuInfo.getPrice() * 100;
+        int unitPrice = (int) price;
+        int goodsPrice = unitPrice * purchaseCount;
+        int totalPayment = goodsPrice + freight;
+
+        int cashback = 0;
+        int customType = authEntity.getMember();
+        if (customType == 2) {
+            float cash = skuInfo.getCashback() * purchaseCount * 100;
+            cashback = (int) cash;
+            totalPayment -= cashback;
+        }
+
+
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setAuthUid(createOrderDirectReqVo.getAuthUid());
+        orderEntity.setCouponCode(createOrderDirectReqVo.getCouponCode());
+        orderEntity.setIuid(authEntity.getIuid());
+        orderEntity.setTid(judgeCashbackedTid(authEntity,createOrderDirectReqVo));
+        orderEntity.setGoodsTotal(goodsPrice);
+        orderEntity.setVip(authEntity.getMember());
+        orderEntity.setTotal(totalPayment);
+        orderEntity.setCashback(cashback);
+        orderEntity.setOp(spuItem.getOp());
+        orderEntity.setOrderStatus(OrderStatus.PAY_WAITING.code);
+        orderEntity.setOid(GlobalIdUtil.newOrderId());
+
+        OrderItemEntity orderItemEntity = new OrderItemEntity();
+        orderItemEntity.setorderItemId(orderEntity.getOid());
+        orderItemEntity.setOid(GlobalIdUtil.newOrderId());
+        orderItemEntity.setAuthUid(authEntity.getAuthUid());
+        orderItemEntity.setOp(spuItem.getOp());
+        orderItemEntity.setSid(skuInfo.getSkuId());
+        //  orderItemEntity.setBarcode
+        orderItemEntity.setSpuId(spuItem.getSpuId());
+        orderItemEntity.setSpuName(spuItem.getSpuName());
+        //orderItemEntity.setSkuName(skuInfo.);
+        //orderItemEntity.setCover();
+        orderItemEntity.setNum(purchaseCount);
+        orderItemEntity.setUnitPrice(unitPrice);
+        //orderItemEntity.setCode
+        //orderItemEntity.setrNum(skuInfo.);
+        orderItemEntity.setTid(orderEntity.getTid());
+        orderItemEntity.setIuid(orderEntity.getIuid());
+        String avaStatus = authEntity.getAvatar();
+        orderItemEntity.setEvaStatus(Integer.parseInt(avaStatus));
+        //orderItemEntity.setCommentId(spuItem.);
+        boolean res = SaveOrder(orderItemEntity, orderEntity);
+        if (!res)
+        {
+           throw new ZXException(ResultStatusCode.CREATE_ORDER_FAILED);
+        }
+
+        orderDirectRespVo.setOrderId(orderEntity.getOid());
+        return orderDirectRespVo;
+    }
+
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public boolean SaveOrder(OrderItemEntity orderItemEntity, OrderEntity orderEntity) {
+        int effectLine = orderItemMapper.insertOrderItem(orderItemEntity);
+        int line = orderMapper.insertOrder(orderEntity);
+        if (line > 0 && effectLine > 0) {
+            String skuId = orderItemEntity.getSid();
+            int count = orderItemEntity.getNum();
+            effectLine = productMapper.decreaseStockCount(skuId, count);
+            if (effectLine > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // 从dynamodb获取sku信息
     private GoodsSpuItem.SkuInfo getOrderItemBySkuId(String skuId) {
-        String spuId = parseSpuIdFromSkuId(skuId);
 
+        String spuId = parseSpuIdFromSkuId(skuId);
         GoodsSpuItem spuItem = dynamoDbService.read(GoodsSpuItem.class, spuId, "0", true);
         if (spuItem == null) {
             logger.error("spu item not found. spudId:{}", spuId);
@@ -119,9 +210,36 @@ public class OrderServiceImpl implements OrderService {
         return segments[0];
     }
 
-//    private int calcFreight(String province, String city) {
-//
-//    }
+    private int CalculateFreight(CreateOrderDirectReqVo orderDirectReqVo, List<Map<String, Integer>> shipInfos) {
+        int freight = 0;
+
+        String skuId = orderDirectReqVo.getSkuId();
+        String province = orderDirectReqVo.getProvince();
+        String city = orderDirectReqVo.getCity();
+        String key = province + "-" + city;
+
+        for (Map<String, Integer> m : shipInfos) {
+            if (m.containsKey(key)) {
+                freight = m.get(key);
+                if (freight < 0) {
+                    logger.info("The shipment is out of delivery area");
+                    throw new ZXException(ResultStatusCode.OUT_OF_DELIVERY_AREA);
+                }
+                break;
+            } else if (m.containsKey(province)) {
+                freight = m.get(province);
+                if (freight < 0) {
+                    logger.info("The shipment is out of delivery area");
+                    throw new ZXException(ResultStatusCode.OUT_OF_DELIVERY_AREA);
+                }
+                break;
+            }
+        }
+
+        freight *= orderDirectReqVo.getPurchaseCount();
+        return freight;
+    }
+
 
     private String judgeCashbackedTid(UserAuthEntity authEntity, CreateOrderDirectReqVo reqVo) {
         Member member = Member.fromCode(authEntity.getMember());
