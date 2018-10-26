@@ -23,7 +23,7 @@ public class OrderEntity extends Entity {
 
     private String op;
 
-    private String check;
+    private String recheck;
 
     private int total;
 
@@ -118,12 +118,12 @@ public class OrderEntity extends Entity {
         this.op = op;
     }
 
-    public String getCheck() {
-        return check;
+    public String getRecheck() {
+        return recheck;
     }
 
-    public void setCheck(String check) {
-        this.check = check;
+    public void setRecheck(String check) {
+        this.recheck = check;
     }
 
     public int getTotal() {

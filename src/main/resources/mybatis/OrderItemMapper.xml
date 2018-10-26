@@ -3,90 +3,94 @@
 <mapper namespace="com.zhenxuan.tradeapi.mapper.OrderItemMapper">
 
     <resultMap id="BaseResultMap" type="com.zhenxuan.tradeapi.entity.OrderItemEntity">
-        <id column="oid" property="oid" />
+        <id column="order_item_id" property="orderItemId" />
+        <result column="oid" property="oid" />
         <result column="auth_uid" property="authUid" />
+        <result column="op" property="op" />
+        <result column="sid" property="sid" />
+        <result column="barcode" property="barcode" />
+        <result column="spu_id" property="spuId" />
+        <result column="spu_name" property="spuName" />
+        <result column="sku_name" property="skuName" />
+        <result column="cover" property="cover" />
+        <result column="num" property="num" />
+        <result column="unit_price" property="unitPrice" />
+        <result column="code" property="code" />
+        <result column="r_num" property="rNum" />
         <result column="tid" property="tid" />
         <result column="iuid" property="iuid" />
-        <result column="vip" property="vip" />
-        <result column="order_status" property="orderStatus" />
-        <result column="code" property="code" />
-        <result column="op" property="op" />
-        <result column="check" property="check" />
-        <result column="total" property="total" />
-        <result column="goods_total" property="goodsTotal" />
-        <result column="cashback" property="cashback" />
-        <result column="bonus" property="bonus" />
-        <result column="coupon_code" property="couponCode" />
-        <result column="coupon_discount" property="couponDiscount" />
-        <result column="freight" property="freight" />
-        <result column="freight_discount" property="freightDiscount" />
-        <result column="payment" property="payment" />
-        <result column="user_balance_consume" property="userBalanceConsume" />
-        <result column="discount" property="discount" />
-        <result column="paid_at" property="paidAt" />
-        <result column="pay_oid" property="payOid" />
+        <result column="eva_status" property="evaStatus" />
+        <result column="comment_id" property="commentId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        auth_uid, tid, iuid, vip, order_status, code, op, check, total, goods_total, cashback, bonus, , wx_app_type, wx_open_id, balance, member, fwh_open_id, expired, tid, iuid, card_id, bank_name, bank_code, real_name, phone, avatar, nick_name, gender, create_time, update_time
+      order_item_id, oid, auth_uid, op, sid, barcode, spu_id, spu_name, sku_name, cover, num, unit_price, code, r_num, tid, iuid,, eva_status, comment_id, create_time, update_time
     </sql>
 
-    <select id="selectEntityByUid" resultMap="BaseResultMap"
-            parameterType="map">
+    <sql id="insert_columns">
+        <if test="orderItemId != null">order_item_id</if>
+        <if test="oid != null">,oid</if>
+        <if test="authUid != null">,auth_uid</if>
+        <if test="op != null">,op</if>
+        <if test="sid != null">,sid</if>
+        <if test="barcode != null">,barcode</if>
+        <if test="spuId != null">,spu_id</if>
+        <if test="spuName != null">,spu_name</if>
+        <if test="skuName != null">,sku_name</if>
+        <if test="cover != null">,cover</if>
+        <if test="num != null">,num</if>
+        <if test="unitPrice != null">,unit_price</if>
+        <if test="code != null">,code</if>
+        <if test="rNum != null">,r_num</if>
+        <if test="tid != null">,tid</if>
+        <if test="iuid != null">,iuid</if>
+        <if test="evaStatus != null">,eva_status</if>
+        <if test="commentId != null">,comment_id</if>
+        create_time,
+        update_time
+    </sql>
+
+    <sql id="insert_values">
+        <if test="orderItemId != null">orderItemId</if>
+        <if test="oid != null">oid</if>
+        <if test="authUid != null">authUid</if>
+        <if test="op != null">op</if>
+        <if test="sid != null">sid</if>
+        <if test="barcode != null">barcode</if>
+        <if test="spuId != null">spuId</if>
+        <if test="spuName != null">spuName</if>
+        <if test="skuName != null">skuName</if>
+        <if test="cover != null">cover</if>
+        <if test="num != null">num</if>
+        <if test="unitPrice != null">unitPrice</if>
+        <if test="code != null">code</if>
+        <if test="rNum != null">rNum</if>
+        <if test="tid != null">tid</if>
+        <if test="iuid != null">iuid</if>
+        <if test="evaStatus != null">evaStatus</if>
+        <if test="commentId != null">commentId</if>
+        now()
+        now()
+    </sql>
+
+    <select id="selectEntityByOid" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
-        from tbl_order
+        from tbl_order_item
         <where>
-            auth_uid = #{authUid,jdbcType=VARCHAR}
+            oid = #{oid,jdbcType=VARCHAR}
         </where>
     </select>
 
-    <insert id="insertPersona"
-            parameterType="com.zhenxuan.tradeapi.entity.OrderEntity">
+    <insert id="insertOrderItem"
+            parameterType="com.zhenxuan.tradeapi.entity.OrderItemEntity">
         insert into
-        tbl_order (
-        <include refid="Persona_Column_List" />
+        tbl_order_item (
+        <include refid="insert_columns" />
         ) values (
-        #{authUid,jdbcType=VARCHAR},
-        #{unionId,jdbcType=VARCHAR},
-        #{wxAppType,jdbcType=VARCHAR},
-        #{wxOpenId,jdbcType=VARCHAR},
-        #{balance,jdbcType=BIGINT},
-        #{iuid,jdbcType=VARCHAR},
-        #{avatar,jdbcType=VARCHAR},
-        #{nickName,jdbcType=VARCHAR},
-        #{gender,jdbcType=TINYINT}
+        <include refid="insert_values" />
         )
     </insert>
-
-    <update id="updatePersonaByUnionId"
-            parameterType="com.zhenxuan.tradeapi.entity.UserAuthEntity">
-        update tbl_user_auth
-        <set>
-            <if test="avatar != null">avatar = #{avatar,jdbcType=VARCHAR},</if>
-            <if test="nickName != null">nick_name = #{nickName,jdbcType=VARCHAR},</if>
-            gender = #{gender,jdbcType=TINYINT}
-        </set>
-        <where>
-            unionid = #{unionId,jdbcType=VARCHAR}
-        </where>
-    </update>
-
-    <update id="updateActionByUid"
-            parameterType="com.zhenxuan.tradeapi.entity.UserAuthEntity">
-        update tbl_user_auth
-        <set>
-            <if test="tid != null">tid = #{tid,jdbcType=VARCHAR}</if>
-            <if test="iuid != null">, iuid = #{iuid,jdbcType=VARCHAR}</if>
-            <if test="fwhOpenId != null">, fwh_open_id = #{fwhOpenId,jdbcType=VARCHAR}</if>
-            <if test="member != 0">, member = #{member,jdbcType=TINYINT}</if>
-            <if test="expired != 0">, expired = #{expired,jdbcType=BIGINT}</if>
-        </set>
-        <where>
-            auth_uid = #{authUid,jdbcType=VARCHAR}
-            <if test="iuid != null">
-                AND iuid = ""
-            </if>
-        </where>
-    </update>
 </mapper>
