@@ -15,6 +15,8 @@ import java.util.Map;
  */
 public abstract class Sign {
 
+    protected static final String FIELD_SIGN = "sign";
+
     /**
      * 构建签名 by object
      * @param config

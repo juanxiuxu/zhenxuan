@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * 微信支付下单结果通知请求类
  */
-public class WXPayDirectNotifyReqVo extends BaseWXPayVo {
+public class WXPayDirectNotifyReqVo extends WXPayBaseVo {
 
     @JsonProperty("appid")
     private String appId;

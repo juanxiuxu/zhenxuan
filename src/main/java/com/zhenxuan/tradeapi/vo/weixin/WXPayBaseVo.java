@@ -5,30 +5,29 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * 微信支付请求和响应基类
  */
-public class BaseWXPayVo {
+public class WXPayBaseVo {
 
     @JsonProperty("return_code")
-    private String code;
+    private String returnCode;
 
     @JsonProperty("return_msg")
-    private String msg;
+    private String returnMsg;
 
-    public String getCode() {
-        return code;
+    public String getReturnCode() {
+        return returnCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setReturnCode(String returnCode) {
+        this.returnCode = returnCode;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getReturnMsg() {
+        return returnMsg;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setReturnMsg(String returnMsg) {
+        this.returnMsg = returnMsg;
     }
-
     public enum WXPayRespCode {
 
         SUCCESS("SUCCESS"),

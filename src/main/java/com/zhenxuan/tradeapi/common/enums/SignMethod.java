@@ -13,7 +13,7 @@ public enum SignMethod {
 
     MD5(1, "MD5"),
     SHA_1(2, "SHA-1"),
-    SHA256(3, "SHA256");
+    HMACSHA256(3, "HMACSHA256");
 
     public final int code;
     public final String des;

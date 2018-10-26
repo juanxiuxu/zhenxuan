@@ -11,7 +11,7 @@ package com.zhenxuan.tradeapi.common.enums;
  */
 public enum SignConfig {
 
-    WX_PAY_SIGN("utf-8", SignMethod.MD5, "wx.pay.sign.key"),
+    WX_PAY_SIGN("utf-8", SignMethod.HMACSHA256, "wx.pay.sign.key"),
     MSG_SIGN("utf-8", SignMethod.MD5, "message.sign.key");
 
     public final String charset;

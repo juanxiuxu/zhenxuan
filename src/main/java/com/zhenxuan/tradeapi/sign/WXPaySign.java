@@ -3,7 +3,9 @@
  */
 package com.zhenxuan.tradeapi.sign;
 
+import com.google.common.base.Throwables;
 import com.zhenxuan.tradeapi.common.enums.SignConfig;
+import com.zhenxuan.tradeapi.common.enums.SignMethod;
 import com.zhenxuan.tradeapi.utils.CommonUtil;
 import com.zhenxuan.tradeapi.vo.weixin.WXPayUnifiedOrderReqVo;
 import org.slf4j.Logger;
@@ -11,10 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Weixin sign method.
@@ -33,25 +32,56 @@ public class WXPaySign extends Sign {
     }
 
     @Override
-    protected String buildSignImpl(SignConfig config, Map<String, Object> map) {
-        StringBuilder res = new StringBuilder();
+    protected String buildSignImpl(SignConfig config, Map<String, Object> data) {
+//        StringBuilder res = new StringBuilder();
+//
+//        // sort the param key in ascending order
+//        Map<String, Object> sortedMap = new TreeMap<String, Object>(map);
+//
+//        // sign should not be included in sign method
+//        sortedMap.remove("sign");
+//
+//        for (Map.Entry<String, Object> entry : sortedMap.entrySet()) {
+//            // convert entry to "key=value" string
+//            if (entry.getValue() != null) {
+//                res.append(String.format("%s=%s&", entry.getKey(), entry.getValue()));
+//            }
+//        }
+//        res.append("key").append("=").append(signKeyMap.get(config.keyRefStr));
+//        logger.info("wx pay check sign with str: {}", res);
+//
+//        return CommonUtil.md5Digest(res.toString(), config.charset).toUpperCase();
 
-        // sort the param key in ascending order
-        Map<String, Object> sortedMap = new TreeMap<String, Object>(map);
 
-        // sign should not be included in sign method
-        sortedMap.remove("sign");
-
-        for (Map.Entry<String, Object> entry : sortedMap.entrySet()) {
-            // convert entry to "key=value" string
-            if (entry.getValue() != null) {
-                res.append(String.format("%s=%s&", entry.getKey(), entry.getValue()));
+        Set<String> keySet = data.keySet();
+        String[] keyArray = keySet.toArray(new String[keySet.size()]);
+        Arrays.sort(keyArray);
+        StringBuilder sb = new StringBuilder();
+        for (String k : keyArray) {
+            if (k.equals(FIELD_SIGN)) {
+                continue;
+            }
+            if (data.get(k) instanceof String) {
+                String value = (String)data.get(k);
+                if (value.trim().length() > 0) {// 参数值为空，则不参与签名
+                    sb.append(k).append("=").append(value.trim()).append("&");
+                }
             }
         }
-        res.append("key").append("=").append(signKeyMap.get(config.keyRefStr));
-        logger.info("wx pay check sign with str: {}", res);
-
-        return CommonUtil.md5Digest(res.toString(), config.charset).toUpperCase();
+        sb.append("key=").append(config.keyRefStr);
+        if (config.signMethod.code == SignMethod.MD5.code) {
+            return CommonUtil.md5Digest(sb.toString(), config.charset).toUpperCase();
+        } else if (config.signMethod.code == SignMethod.HMACSHA256.code) {
+            try {
+                return CommonUtil.hmacSHA256Digest(sb.toString(), config.keyRefStr, config.charset).toUpperCase();
+            } catch (Exception ex) {
+                logger.error("HMACSHA256 digest error. {}", Throwables.getStackTraceAsString(ex));
+                throw new RuntimeException("HMACSHA256 digest error");
+            }
+        } else {
+            logger.error("This sign method:{} not support for WXPay sign", config.signMethod);
+            throw new RuntimeException("Not supported sign method");
+        }
     }
 
     public static void main(String[] args) {

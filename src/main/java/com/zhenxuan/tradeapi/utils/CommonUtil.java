@@ -9,6 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
@@ -90,6 +92,25 @@ public class CommonUtil {
             logger.error("md5Digest exception", e);
             return null;
         }
+    }
+
+    /**
+     * 生成 HMACSHA256
+     * @param data 待处理数据
+     * @param key 密钥
+     * @return 加密结果
+     * @throws Exception
+     */
+    public static String hmacSHA256Digest(String data, String key, String charset) throws Exception {
+        Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
+        SecretKeySpec secret_key = new SecretKeySpec(key.getBytes(charset), "HmacSHA256");
+        sha256_HMAC.init(secret_key);
+        byte[] array = sha256_HMAC.doFinal(data.getBytes(charset));
+        StringBuilder sb = new StringBuilder();
+        for (byte item : array) {
+            sb.append(Integer.toHexString((item & 0xFF) | 0x100).substring(1, 3));
+        }
+        return sb.toString().toUpperCase();
     }
 
     public static Map<String, Object> convertParam2LowerScore(Map<String, Object> map) {
