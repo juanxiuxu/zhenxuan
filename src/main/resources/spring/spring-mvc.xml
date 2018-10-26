@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <aop:aspectj-autoproxy />
+    <context:annotation-config />
+
+    <context:component-scan base-package="com.zhenxuan.tradeapi"/>
+
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/plain;charset=UTF-8</value>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+            <!-- 将Jackson2HttpMessageConverter的默认格式化输出设为true -->
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="prettyPrint" value="true" />
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json; charset=UTF-8</value>
+                        <value>application/x-www-form-urlencoded; charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <bean class="com.zhenxuan.tradeapi.common.ExceptionHandler" />
+
+    <!-- 前端Json自动转换为后端对象直接引用 >
+
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="jsonHttpMessageConverter" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="jsonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>application/json;charset=UTF-8</value>
+            </list>
+        </property>
+    </bean -->
+
+    <util:map id="signKeyMap" map-class="java.util.HashMap" key-type="java.lang.String" value-type="java.lang.String">
+        <entry key="wx.pay.sign.key" value="${wx.pay.merchantkey}"/>
+    </util:map>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+    <mvc:default-servlet-handler/>
+    <!-- mvc:resources location="/js/" mapping="/js/**"/>
+    <mvc:resources location="/css/" mapping="/css/**"/>
+    <mvc:resources location="/baidu/" mapping="/baidu/**"/>
+    <mvc:resources location="/data/" mapping="/data/**"/>  -->
+    <!-- mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/data/**"/>
+            <mvc:exclude-mapping path="/js/**"/>
+            <mvc:exclude-mapping path="/baidu/**"/>
+            <mvc:exclude-mapping path="/css/**"/>
+            <bean class="com.zhenxuan.tradeapi.interceptor.TokenInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors -->
+
+    <bean id="validator"
+          class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+    <!--aop配置-->
+    <bean id="controllerParamsInterceptor" class="com.zhenxuan.tradeapi.interceptor.ControllerParamsInterceptor">
+        <property name="validator" ref="validator"/>
+    </bean>
+
+    <aop:config>
+        <!--切入点-->
+        <aop:pointcut id="cPointCut" expression="execution(public * com.zhenxuan.tradeapi.controller..*.*(..))"/>
+        <!-- 在该切入点使用自定义拦截器 -->
+        <aop:advisor pointcut-ref="cPointCut" advice-ref="controllerParamsInterceptor"/>
+    </aop:config>
+</beans>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhenxuan.tradeapi.mapper.UserLoginMapper">
+
+    <resultMap id="BaseResultMap" type="com.zhenxuan.tradeapi.entity.UserLoginEntity">
+        <id column="login_uid" property="loginUid" jdbcType="VARCHAR"/>
+        <result column="wx_app_type" property="wxAppType" jdbcType="VARCHAR"/>
+        <result column="wx_open_id" property="wxOpenId" jdbcType="VARCHAR"/>
+        <result column="balance" property="balance" jdbcType="BIGINT"/>
+        <result column="unionid" property="unionId" jdbcType="VARCHAR"/>
+        <result column="fwh_open_id" property="fwhOpenId" jdbcType="VARCHAR"/>
+        <result column="tid" property="tid" jdbcType="VARCHAR"/>
+        <result column="iuid" property="iuid" jdbcType="VARCHAR"/>
+        <result column="wx_session_key" property="wxSessionKey" jdbcType="VARCHAR"/>
+        <result column="last_login" property="lastLogin" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        login_uid, wx_app_type, wx_open_id, balance, unionid, fwh_open_id, tid, iuid, wx_session_key, last_login
+    </sql>
+
+    <sql id="Login_Column_List">
+        login_uid, wx_app_type, wx_open_id, unionid, wx_session_key, last_login
+    </sql>
+
+    <!-- sql id="Find_By_Param_Where">
+        <if test="wxAppType != 0">
+            and wx_app_type = #{wxAppType,jdbcType=VARCHAR}
+        </if>
+        <if test="wxOpenId != null and wxOpenId != ''">
+            and wx_open_id = #{wxOpenId,jdbcType=VARCHAR}
+        </if>
+        <if test="balance != 0">
+            and name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="token != null">
+            and token = #{token,jdbcType=VARCHAR}
+        </if>
+        <if test="userType != null">
+            and user_type = #{userType,jdbcType=SMALLINT}
+        </if>
+        <if test="createTime != null">
+            and create_time = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="lastAccessTime != null and lastAccessTime != 0">
+            and last_access_time = #{lastAccessTime,jdbcType=BIGINT}
+        </if>
+    </sql -->
+
+    <!-- sql id="Set_By_Param">
+        <if test="wxAppType != null">
+            wx_app_type = #{wxAppType,jdbcType=VARCHAR},
+        </if>
+        <if test="wxOpenId != null">
+            wx_open_id = #{wxOpenId,jdbcType=VARCHAR},
+        </if>
+        <if test="balance != 0">
+            balance = #{balance,jdbcType=BIGINT},
+        </if>
+        <if test="unionId != null">
+            unionid = #{unionId,jdbcType=VARCHAR},
+        </if>
+        <if test="fwhOpenId != null">
+            fwh_open_id = #{fwhOpenId,jdbcType=VARCHAR},
+        </if>
+        <if test="tid != null">
+            tid = #{tid,jdbcType=VARCHAR},
+        </if>
+        <if test="iuid != null">
+            iuid = #{iuid,jdbcType=VARCHAR},
+        </if>
+        <if test="wxSessionKey != null">
+            wx_session_key = #{wxSessionKey,jdbcType=VARCHAR},
+        </if>
+        <if test="lastLogin != null">
+            last_login = now()
+        </if>
+    </sql -->
+
+    <select id="selectEntityByUniqueKey" resultMap="BaseResultMap"
+        parameterType="map">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_user_login
+        <where>
+            wx_app_type = #{wxAppType,jdbcType=VARCHAR}
+            AND wx_open_id = #{wxOpenId,jdbcType=VARCHAR}
+        </where>
+    </select>
+
+    <select id="selectEntityByUid" resultMap="BaseResultMap"
+            parameterType="map">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_user_login
+        <where>
+            login_uid = #{loginUid,jdbcType=VARCHAR}
+        </where>
+    </select>
+    <!--
+    <select id="selectOverDueUser" resultMap="BaseResultMap"
+            parameterType="com.zhenxuan.tradeapi.entity.UserLoginEntity">
+        select
+        <include refid="Base_Column_List" />
+        from user
+        WHERE last_access_time &lt;  #{lastAccessTime,jdbcType=BIGINT}
+        ORDER BY user_id DESC
+    </select>
+    
+    <select id="selectByRoleList" resultMap="BaseResultMap"
+        parameterType="java.util.List">
+        select
+        <include refid="Base_Column_List" />
+        from 
+            user, user_role
+        where 
+            user_id = user_role.user_id
+            and user_role.role_id in
+            (
+                <foreach collection="list" item="item" index="index" separator=",">
+                    #{item.roleId,jdbcType=BIGINT}
+                </foreach>
+            )
+        
+    </select>
+    
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from user where user_id = #{userId,jdbcType=BIGINT}
+    </delete>
+
+    <update id="deleteTokenByUserName" parameterType="String">
+    update user SET token = "" where user_name = #{userName,jdbcType=VARCHAR}
+    </update>
+    
+    <update id="updateById" parameterType="com.zhenxuan.tradeapi.entity.UserLoginEntity">
+        update user
+        <set>
+            <include refid="Set_By_Param"></include>
+        </set>
+        where user_id = #{userId,jdbcType=BIGINT}
+    </update>
+-->
+
+    <update id="updateLoginInfoByUniqueKey"
+            parameterType="com.zhenxuan.tradeapi.entity.UserLoginEntity">
+        update tbl_user_login
+        <set>
+            <if test="unionId != null">unionid = #{unionId,jdbcType=VARCHAR},</if>
+            <if test="wxSessionKey != null">wx_session_key = #{wxSessionKey,jdbcType=VARCHAR},</if>
+            last_login = now()
+        </set>
+        <where>
+            wx_app_type = #{wxAppType,jdbcType=VARCHAR}
+            AND wx_open_id = #{wxOpenId,jdbcType=VARCHAR}
+        </where>
+    </update>
+
+    <update id="updateUnionIdByUid"
+            parameterType="com.zhenxuan.tradeapi.entity.UserLoginEntity">
+        update tbl_user_login
+        <set>
+            unionid = #{unionId,jdbcType=VARCHAR}
+        </set>
+        <where>
+            login_uid = #{loginUid,jdbcType=VARCHAR}
+        </where>
+    </update>
+
+    <insert id="insertLoginInfo"
+            parameterType="com.zhenxuan.tradeapi.entity.UserLoginEntity">
+        insert into
+        tbl_user_login (
+        <include refid="Login_Column_List" />
+        ) values (
+        #{loginUid,jdbcType=VARCHAR},
+        #{wxAppType,jdbcType=VARCHAR},
+        #{wxOpenId,jdbcType=VARCHAR},
+        <choose>
+            <when test="unionId != null">
+                #{unionId,jdbcType=VARCHAR},
+            </when>
+            <otherwise>
+                '',
+            </otherwise>
+        </choose>
+        #{wxSessionKey,jdbcType=VARCHAR},
+        now()
+        )
+    </insert>
+</mapper>

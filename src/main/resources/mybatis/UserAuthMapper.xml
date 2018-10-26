@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhenxuan.tradeapi.mapper.UserAuthMapper">
+
+    <resultMap id="BaseResultMap" type="com.zhenxuan.tradeapi.entity.UserAuthEntity">
+        <id column="auth_uid" property="authUid" jdbcType="VARCHAR"/>
+        <result column="unionid" property="unionId" jdbcType="VARCHAR"/>
+        <result column="wx_app_type" property="wxAppType" jdbcType="VARCHAR"/>
+        <result column="wx_open_id" property="wxOpenId" jdbcType="VARCHAR"/>
+        <result column="balance" property="balance" jdbcType="BIGINT"/>
+        <result column="member" property="member" jdbcType="TINYINT"/>
+        <result column="fwh_open_id" property="fwhOpenId" jdbcType="VARCHAR"/>
+        <result column="expired" property="expired" jdbcType="BIGINT"/>
+        <result column="tid" property="tid" jdbcType="VARCHAR"/>
+        <result column="iuid" property="iuid" jdbcType="VARCHAR"/>
+        <result column="card_id" property="cardId" jdbcType="VARCHAR"/>
+        <result column="bank_name" property="bankName" jdbcType="VARCHAR"/>
+        <result column="bank_code" property="bankCode" jdbcType="VARCHAR"/>
+        <result column="real_name" property="realName" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="avatar" property="avatar" jdbcType="VARCHAR"/>
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
+        <result column="gender" property="gender" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        auth_uid, unionid, wx_app_type, wx_open_id, balance, member, fwh_open_id, expired, tid, iuid, card_id, bank_name, bank_code, real_name, phone, avatar, nick_name, gender, create_time, update_time
+    </sql>
+
+    <sql id="Persona_Column_List">
+        auth_uid, unionid, wx_app_type, wx_open_id, balance, iuid, avatar, nick_name, gender
+    </sql>
+
+    <!-- sql id="Set_By_Param">
+        <if test="authUid != null">
+            auth_uid = #{authUid,jdbcType=INTEGER},
+        </if>
+        <if test="unionId != null">
+            unionid = #{unionId,jdbcType=VARCHAR},
+        </if>
+        <if test="wxAppType != null">
+            wx_app_type = #{wxAppType,jdbcType=VARCHAR},
+        </if>
+        <if test="wxOpenId != null">
+            wx_open_id = #{wxOpenId,jdbcType=VARCHAR},
+        </if>
+        <if test="balance != 0">
+            balance = #{balance,jdbcType=BIGINT},
+        </if>
+        <if test="member != 0">
+            member = #{member,jdbcType=TINYINT},
+        </if>
+        <if test="fwhOpenId != null">
+            fwh_open_id = #{fwhOpenId,jdbcType=VARCHAR},
+        </if>
+        <if test="tid != null">
+            tid = #{tid,jdbcType=VARCHAR},
+        </if>
+        <if test="iuid != null">
+            iuid = #{iuid,jdbcType=VARCHAR},
+        </if>
+    </sql -->
+
+    <select id="selectEntityByUnionId" resultMap="BaseResultMap"
+        parameterType="map">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_user_auth
+        <where>
+            unionId = #{unionId,jdbcType=VARCHAR}
+        </where>
+    </select>
+
+    <select id="selectEntityByUid" resultMap="BaseResultMap"
+            parameterType="map">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_user_auth
+        <where>
+            auth_uid = #{authUid,jdbcType=VARCHAR}
+        </where>
+    </select>
+
+    <insert id="insertPersona"
+            parameterType="com.zhenxuan.tradeapi.entity.UserAuthEntity">
+        insert into
+        tbl_user_auth (
+        <include refid="Persona_Column_List" />
+        ) values (
+        #{authUid,jdbcType=VARCHAR},
+        #{unionId,jdbcType=VARCHAR},
+        #{wxAppType,jdbcType=VARCHAR},
+        #{wxOpenId,jdbcType=VARCHAR},
+        #{balance,jdbcType=BIGINT},
+        #{iuid,jdbcType=VARCHAR},
+        #{avatar,jdbcType=VARCHAR},
+        #{nickName,jdbcType=VARCHAR},
+        #{gender,jdbcType=TINYINT}
+        )
+    </insert>
+
+    <update id="updatePersonaByUnionId"
+            parameterType="com.zhenxuan.tradeapi.entity.UserAuthEntity">
+        update tbl_user_auth
+        <set>
+            <if test="avatar != null">avatar = #{avatar,jdbcType=VARCHAR},</if>
+            <if test="nickName != null">nick_name = #{nickName,jdbcType=VARCHAR},</if>
+            gender = #{gender,jdbcType=TINYINT}
+        </set>
+        <where>
+            unionid = #{unionId,jdbcType=VARCHAR}
+        </where>
+    </update>
+
+    <update id="updateActionByUid"
+            parameterType="com.zhenxuan.tradeapi.entity.UserAuthEntity">
+        update tbl_user_auth
+        <set>
+            <if test="tid != null">tid = #{tid,jdbcType=VARCHAR}</if>
+            <if test="iuid != null">, iuid = #{iuid,jdbcType=VARCHAR}</if>
+            <if test="fwhOpenId != null">, fwh_open_id = #{fwhOpenId,jdbcType=VARCHAR}</if>
+            <if test="member != 0">, member = #{member,jdbcType=TINYINT}</if>
+            <if test="expired != 0">, expired = #{expired,jdbcType=BIGINT}</if>
+        </set>
+        <where>
+            auth_uid = #{authUid,jdbcType=VARCHAR}
+            <if test="iuid != null">
+                AND iuid = ""
+            </if>
+        </where>
+    </update>
+</mapper>

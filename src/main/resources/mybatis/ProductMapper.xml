@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhenxuan.tradeapi.mapper.ProductMapper">
+
+    <resultMap id="BaseResultMap" type="com.zhenxuan.tradeapi.entity.ProductEntity">
+        <id column="sku_id" property="skuId" />
+        <result column="spu_id" property="spuId" />
+        <result column="sales_count" property="salesCount" />
+        <result column="stock_count" property="stockCount" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        sku_id, spu_id, sales_count, stock_count
+    </sql>
+
+    <select id="selectEntity" resultMap="BaseResultMap"
+            parameterType="map">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_product
+        <where>
+            sku_id = #{skuId}
+        </where>
+    </select>
+
+    <update id="decreaseStockCount"
+            parameterType="map">
+        update tbl_product
+        <set>
+            stock_count = stock_count - #{count,jdbcType=INTEGER}
+        </set>
+        <where>
+            sku_id = #{skuId,jdbcType=VARCHAR}
+            AND stock_count - #{count,jdbcType=INTEGER} >= 0
+        </where>
+    </update>
+
+    <update id="increaseStockCount"
+            parameterType="map">
+        update tbl_product
+        <set>
+            stock_count = stock_count + #{count,jdbcType=INTEGER}
+        </set>
+        <where>
+            sku_id = #{skuId,jdbcType=VARCHAR}
+        </where>
+    </update>
+
+    <update id="increaseSalesCount"
+            parameterType="map">
+        update tbl_product
+        <set>
+            sales_count = sales_count + #{count,jdbcType=INTEGER}
+        </set>
+        <where>
+            sku_id = #{skuId,jdbcType=VARCHAR}
+        </where>
+    </update>
+</mapper>
