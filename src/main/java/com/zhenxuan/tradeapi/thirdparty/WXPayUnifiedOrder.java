@@ -11,11 +11,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 
 /**
- * 微信支付
+ * 微信统一下单
  */
-public class WXOrderPay {
+public class WXPayUnifiedOrder {
 
-    private static final Logger logger = LoggerFactory.getLogger(WXOrderPay.class);
+    private static final Logger logger = LoggerFactory.getLogger(WXPayUnifiedOrder.class);
 
     @Value("${wx.zhenxuan.appid}")
     private String appId;
