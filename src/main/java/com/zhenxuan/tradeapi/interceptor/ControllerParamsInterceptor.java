@@ -4,7 +4,7 @@ import com.zhenxuan.tradeapi.common.ZXException;
 import com.zhenxuan.tradeapi.common.http.BaseResponse;
 import com.zhenxuan.tradeapi.common.enums.ResultStatusCode;
 import com.zhenxuan.tradeapi.utils.JsonUtil;
-import com.zhenxuan.tradeapi.vo.Input;
+import com.zhenxuan.tradeapi.common.vo.Input;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
@@ -70,7 +70,7 @@ public class ControllerParamsInterceptor implements MethodInterceptor {
     /**
      * Log http request.
      *
-     * @param input request entity
+     * @param input request dao
      *
      * @return request params in JSON string
      */

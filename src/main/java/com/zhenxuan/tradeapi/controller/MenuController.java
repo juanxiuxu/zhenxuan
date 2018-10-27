@@ -3,7 +3,7 @@
 //import java.util.List;
 //import com.alibaba.druid.util.StringUtils;
 //import com.zhenxuan.tradeapi.common.ZXException;
-//import com.zhenxuan.tradeapi.entity.UserLoginEntity;
+//import com.zhenxuan.tradeapi.dao.entity.UserLoginEntity;
 //import com.zhenxuan.tradeapi.model.MenuPojo;
 //import com.zhenxuan.tradeapi.model.PermissionAndResource;
 //import com.zhenxuan.tradeapi.model.CreateMenuPojo;

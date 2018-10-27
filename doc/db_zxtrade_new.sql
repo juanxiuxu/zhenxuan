@@ -170,26 +170,29 @@ CREATE TABLE `tbl_product` (
   PRIMARY KEY (`sku_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `tbl_pay_order`;
-CREATE TABLE `tbl_pay_order` (
-  `pay_order_id` varchar(255) NOT NULL,
+DROP TABLE IF EXISTS `tbl_pay_trade`;
+CREATE TABLE `tbl_pay_trade` (
+  `pay_trade_id` varchar(255) NOT NULL,
   `oid` varchar(255) NOT NULL,
-  `amount` bigint(20) NOT NULL,
   `auth_uid` varchar(64) NOT NULL,
-  `wx_open_id` varchar(255) NOT NULL COMMENT '支付时需要',
-  `product_description` varchar(255) NOT NULL,
-  `code` varchar(255) NOT NULL COMMENT '微信支付状态',
-  `ip` varchar(255) NOT NULL,
-  `trade_type` varchar(255) NOT NULL COMMENT '微信返回',
+  `amount` bigint(20) NOT NULL COMMENT '统一下单原始总金额',
   `prepay_id` varchar(255) NOT NULL COMMENT '微信发通知用',
-  `error_code` varchar(255) NOT NULL,
-  `error_code_des` varchar(255) NOT NULL,
-  `paid_at` datetime NOT NULL COMMENT '交易成功的时间',
-  `transaction_id` varchar(255) NOT NULL COMMENT '微信交易单号',
-  `bank_type` varchar(255) NOT NULL,
+  `ip` varchar(255) NOT NULL,
+   `result_code` varchar(255) NOT NULL COMMENT '微信支付业务结果',
+  `transaction_id` varchar(255) NOT NULL DEFAULT '' COMMENT '微信交易单号',
+  `total_fee` bigint(20) NOT NULL DEFAULT 0 COMMENT '微信订单总金额',
+  `fee_type` varchar(128) NOT NULL DEFAULT 'CNY' COMMENT '微信货币类型',
+  `cash_fee` bigint(20) NOT NULL DEFAULT 0 COMMENT '微信订单总金额',
+  `settlement_total_fee` bigint(20) NOT NULL DEFAULT 0 COMMENT '应结订单金额',
+  `is_subscribe` varchar(16) NOT NULL DEFAULT '' COMMENT '是否关注公众号',
+  `wx_open_id` varchar(255) NOT NULL DEFAULT '' COMMENT '支付时需要',
+  `product_description` varchar(255) NOT NULL DEFAULT '',
+  `trade_type` varchar(255) NOT NULL DEFAULT '' COMMENT '微信交易类型',
+  `bank_type` varchar(255) NOT NULL DEFAULT '' COMMENT '微信付款银行',
+  `paid_at` varchar(64) NOT NULL DEFAULT '' COMMENT '微信交易完成时间',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`pay_order_id`)
+  PRIMARY KEY (`pay_trade_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='微信支付交易表';
 
 DROP TABLE IF EXISTS `tbl_reverse_order`;
@@ -216,8 +219,8 @@ CREATE TABLE `tbl_reverse_order` (
   PRIMARY KEY (`reverse_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `tbl_user_bill`;
-CREATE TABLE `tbl_user_bill` (
+DROP TABLE IF EXISTS `tbl_user_balance_bill`;
+CREATE TABLE `tbl_user_balance_bill` (
   `bill_id` varchar(255) NOT NULL,
   `auth_uid` varchar(64) NOT NULL,
   `amount` bigint(20) NOT NULL,

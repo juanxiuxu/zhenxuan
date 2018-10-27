@@ -7,7 +7,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.common.base.Throwables;
-import com.zhenxuan.tradeapi.vo.TokenHeaderVo;
+import com.zhenxuan.tradeapi.common.vo.TokenHeaderVo;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

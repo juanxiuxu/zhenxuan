@@ -2,8 +2,8 @@ package com.zhenxuan.tradeapi.controller;
 
 import com.zhenxuan.tradeapi.common.ResultBody;
 import com.zhenxuan.tradeapi.service.OrderService;
-import com.zhenxuan.tradeapi.vo.CreateOrderDirectReqVo;
-import com.zhenxuan.tradeapi.vo.CreateOrderDirectRespVo;
+import com.zhenxuan.tradeapi.common.vo.CreateOrderDirectReqVo;
+import com.zhenxuan.tradeapi.common.vo.CreateOrderDirectRespVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

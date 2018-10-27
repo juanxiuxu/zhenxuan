@@ -1,6 +1,6 @@
 package com.zhenxuan.tradeapi.service.impl;
 
-import com.zhenxuan.tradeapi.entity.ShopItem;
+import com.zhenxuan.tradeapi.dao.entity.ShopItem;
 import com.zhenxuan.tradeapi.service.ShopService;
 import com.zhenxuan.tradeapi.thirdparty.DynamoDbService;
 import org.springframework.beans.factory.annotation.Autowired;

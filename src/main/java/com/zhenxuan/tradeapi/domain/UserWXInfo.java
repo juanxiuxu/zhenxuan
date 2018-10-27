@@ -1,6 +1,6 @@
 package com.zhenxuan.tradeapi.domain;
 
-import com.zhenxuan.tradeapi.vo.weixin.WXCode2SessionRespVo;
+import com.zhenxuan.tradeapi.common.vo.weixin.WXCode2SessionRespVo;
 
 /**
  * 用户微信基本信息

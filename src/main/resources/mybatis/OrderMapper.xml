@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhenxuan.tradeapi.mapper.OrderMapper">
+<mapper namespace="com.zhenxuan.tradeapi.dao.mapper.OrderMapper">
 
-    <resultMap id="BaseResultMap" type="com.zhenxuan.tradeapi.entity.OrderEntity">
+    <resultMap id="BaseResultMap" type="com.zhenxuan.tradeapi.dao.entity.OrderEntity">
         <id column="oid" property="oid" />
         <result column="auth_uid" property="authUid" />
         <result column="tid" property="tid" />
@@ -97,7 +97,7 @@
     </select>
 
     <insert id="insertOrder"
-            parameterType="com.zhenxuan.tradeapi.entity.OrderEntity">
+            parameterType="com.zhenxuan.tradeapi.dao.entity.OrderEntity">
         insert into
         tbl_order (
         <include refid="insert_columns" />

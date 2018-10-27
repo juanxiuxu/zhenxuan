@@ -55,7 +55,7 @@
 
     <!-- 业务后台mapper路径 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.zhenxuan.tradeapi.mapper" />
+        <property name="basePackage" value="com.zhenxuan.tradeapi.dao.mapper" />
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryBiz"></property>
     </bean>
     

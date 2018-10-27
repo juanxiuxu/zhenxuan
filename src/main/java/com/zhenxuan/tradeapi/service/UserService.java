@@ -1,8 +1,8 @@
 package com.zhenxuan.tradeapi.service;
 
-import com.zhenxuan.tradeapi.entity.UserAuthEntity;
-import com.zhenxuan.tradeapi.entity.UserLoginEntity;
-import com.zhenxuan.tradeapi.vo.*;
+import com.zhenxuan.tradeapi.dao.entity.UserAuthEntity;
+import com.zhenxuan.tradeapi.dao.entity.UserLoginEntity;
+import com.zhenxuan.tradeapi.common.vo.*;
 
 public interface UserService {
 

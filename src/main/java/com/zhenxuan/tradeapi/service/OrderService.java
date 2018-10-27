@@ -1,7 +1,7 @@
 package com.zhenxuan.tradeapi.service;
 
-import com.zhenxuan.tradeapi.vo.CreateOrderDirectReqVo;
-import com.zhenxuan.tradeapi.vo.CreateOrderDirectRespVo;
+import com.zhenxuan.tradeapi.common.vo.CreateOrderDirectReqVo;
+import com.zhenxuan.tradeapi.common.vo.CreateOrderDirectRespVo;
 
 /**
  * orderservice

@@ -3,7 +3,7 @@
 // */
 //package com.zhenxuan.tradeapi.controller;
 //
-//import com.zhenxuan.tradeapi.entity.UserLoginEntity;
+//import com.zhenxuan.tradeapi.dao.entity.UserLoginEntity;
 //import com.zhenxuan.tradeapi.service.impl.UserServiceImpl;
 //import com.zhenxuan.tradeapi.utils.NetUtil;
 //import com.zhenxuan.tradeapi.uuap.UuapConstants;

@@ -1,9 +1,9 @@
 package com.zhenxuan.tradeapi.thirdparty;
 
 import com.google.common.base.Throwables;
-import com.zhenxuan.tradeapi.sign.Sign;
+import com.zhenxuan.tradeapi.common.sign.Sign;
 import com.zhenxuan.tradeapi.utils.JsonUtil;
-import com.zhenxuan.tradeapi.vo.weixin.WXPayBaseVo;
+import com.zhenxuan.tradeapi.common.vo.weixin.WXPayBaseVo;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +26,10 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class WXPayBaseRpc {
 
@@ -151,5 +153,21 @@ public class WXPayBaseRpc {
 
     private Document newDocument() throws ParserConfigurationException {
         return newDocumentBuilder().newDocument();
+    }
+
+    private static final String SYMBOLS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final Random RANDOM = new SecureRandom();
+
+    /**
+     * 获取随机字符串 Nonce Str
+     *
+     * @return String 随机字符串
+     */
+    protected static String generateNonceStr() {
+        char[] nonceChars = new char[32];
+        for (int index = 0; index < nonceChars.length; ++index) {
+            nonceChars[index] = SYMBOLS.charAt(RANDOM.nextInt(SYMBOLS.length()));
+        }
+        return new String(nonceChars);
     }
 }

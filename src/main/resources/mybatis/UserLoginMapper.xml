@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhenxuan.tradeapi.mapper.UserLoginMapper">
+<mapper namespace="com.zhenxuan.tradeapi.dao.mapper.UserLoginMapper">
 
-    <resultMap id="BaseResultMap" type="com.zhenxuan.tradeapi.entity.UserLoginEntity">
+    <resultMap id="BaseResultMap" type="com.zhenxuan.tradeapi.dao.entity.UserLoginEntity">
         <id column="login_uid" property="loginUid" jdbcType="VARCHAR"/>
         <result column="wx_app_type" property="wxAppType" jdbcType="VARCHAR"/>
         <result column="wx_open_id" property="wxOpenId" jdbcType="VARCHAR"/>
@@ -99,7 +99,7 @@
     </select>
     <!--
     <select id="selectOverDueUser" resultMap="BaseResultMap"
-            parameterType="com.zhenxuan.tradeapi.entity.UserLoginEntity">
+            parameterType="com.zhenxuan.tradeapi.daoerLoginEntity">
         select
         <include refid="Base_Column_List" />
         from user
@@ -132,7 +132,7 @@
     update user SET token = "" where user_name = #{userName,jdbcType=VARCHAR}
     </update>
     
-    <update id="updateById" parameterType="com.zhenxuan.tradeapi.entity.UserLoginEntity">
+    <update id="updateById" parameterType="com.zhenxuan.tradeapi.daoerLoginEntity">
         update user
         <set>
             <include refid="Set_By_Param"></include>
@@ -142,7 +142,7 @@
 -->
 
     <update id="updateLoginInfoByUniqueKey"
-            parameterType="com.zhenxuan.tradeapi.entity.UserLoginEntity">
+            parameterType="com.zhenxuan.tradeapi.dao.entity.UserLoginEntity">
         update tbl_user_login
         <set>
             <if test="unionId != null">unionid = #{unionId,jdbcType=VARCHAR},</if>
@@ -156,7 +156,7 @@
     </update>
 
     <update id="updateUnionIdByUid"
-            parameterType="com.zhenxuan.tradeapi.entity.UserLoginEntity">
+            parameterType="com.zhenxuan.tradeapi.dao.entity.UserLoginEntity">
         update tbl_user_login
         <set>
             unionid = #{unionId,jdbcType=VARCHAR}
@@ -167,7 +167,7 @@
     </update>
 
     <insert id="insertLoginInfo"
-            parameterType="com.zhenxuan.tradeapi.entity.UserLoginEntity">
+            parameterType="com.zhenxuan.tradeapi.dao.entity.UserLoginEntity">
         insert into
         tbl_user_login (
         <include refid="Login_Column_List" />

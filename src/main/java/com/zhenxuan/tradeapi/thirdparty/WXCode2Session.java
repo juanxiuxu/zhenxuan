@@ -5,7 +5,7 @@ import com.zhenxuan.tradeapi.common.ZXException;
 import com.zhenxuan.tradeapi.common.http.HttpJSONHelper;
 import com.zhenxuan.tradeapi.common.enums.ResultStatusCode;
 import com.zhenxuan.tradeapi.domain.UserWXInfo;
-import com.zhenxuan.tradeapi.vo.weixin.WXCode2SessionRespVo;
+import com.zhenxuan.tradeapi.common.vo.weixin.WXCode2SessionRespVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

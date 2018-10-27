@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhenxuan.tradeapi.mapper.UserAuthMapper">
+<mapper namespace="com.zhenxuan.tradeapi.dao.mapper.UserAuthMapper">
 
-    <resultMap id="BaseResultMap" type="com.zhenxuan.tradeapi.entity.UserAuthEntity">
+    <resultMap id="BaseResultMap" type="com.zhenxuan.tradeapi.dao.entity.UserAuthEntity">
         <id column="auth_uid" property="authUid" jdbcType="VARCHAR"/>
         <result column="unionid" property="unionId" jdbcType="VARCHAR"/>
         <result column="wx_app_type" property="wxAppType" jdbcType="VARCHAR"/>
@@ -82,7 +82,7 @@
     </select>
 
     <insert id="insertPersona"
-            parameterType="com.zhenxuan.tradeapi.entity.UserAuthEntity">
+            parameterType="com.zhenxuan.tradeapi.dao.entity.UserAuthEntity">
         insert into
         tbl_user_auth (
         <include refid="Persona_Column_List" />
@@ -100,7 +100,7 @@
     </insert>
 
     <update id="updatePersonaByUnionId"
-            parameterType="com.zhenxuan.tradeapi.entity.UserAuthEntity">
+            parameterType="com.zhenxuan.tradeapi.dao.entity.UserAuthEntity">
         update tbl_user_auth
         <set>
             <if test="avatar != null">avatar = #{avatar,jdbcType=VARCHAR},</if>
@@ -113,7 +113,7 @@
     </update>
 
     <update id="updateActionByUid"
-            parameterType="com.zhenxuan.tradeapi.entity.UserAuthEntity">
+            parameterType="com.zhenxuan.tradeapi.dao.entity.UserAuthEntity">
         update tbl_user_auth
         <set>
             <if test="tid != null">tid = #{tid,jdbcType=VARCHAR}</if>

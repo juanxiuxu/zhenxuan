@@ -2,11 +2,11 @@ package com.zhenxuan.tradeapi.thirdparty;
 
 import com.zhenxuan.tradeapi.common.ZXException;
 import com.zhenxuan.tradeapi.common.enums.ResultStatusCode;
-import com.zhenxuan.tradeapi.entity.UserLoginEntity;
+import com.zhenxuan.tradeapi.dao.entity.UserLoginEntity;
 import com.zhenxuan.tradeapi.utils.AesUtil;
 import com.zhenxuan.tradeapi.utils.JsonUtil;
-import com.zhenxuan.tradeapi.vo.AuthReqVo;
-import com.zhenxuan.tradeapi.vo.weixin.WXGetUserInfoRespVo;
+import com.zhenxuan.tradeapi.common.vo.AuthReqVo;
+import com.zhenxuan.tradeapi.common.vo.weixin.WXGetUserInfoRespVo;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

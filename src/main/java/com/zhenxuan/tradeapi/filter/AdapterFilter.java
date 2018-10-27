@@ -7,7 +7,7 @@
 //import com.zhenxuan.tradeapi.common.ResultBody;
 //import com.zhenxuan.tradeapi.constants.Constants;
 //import com.zhenxuan.tradeapi.common.enums.ResultStatusCode;
-//import com.zhenxuan.tradeapi.entity.UserLoginEntity;
+//import com.zhenxuan.tradeapi.dao.entity.UserLoginEntity;
 //import com.zhenxuan.tradeapi.service.CurrentUserService;
 //import com.zhenxuan.tradeapi.service.HistoryService;
 //import com.zhenxuan.tradeapi.service.RoleService;
@@ -250,9 +250,9 @@
 ////            userService.updateLastAccessTimeByToken(token);
 //        } else {
 //            // 没有缓存时,根据token查找用户,并判断是否有权限
-//            UserLoginEntity entity = new UserLoginEntity();
-//            entity.setToken(token);
-//            List<UserLoginEntity> userEntityList = userService.selectByParam(entity);
+//            UserLoginEntity dao = new UserLoginEntity();
+//            dao.setToken(token);
+//            List<UserLoginEntity> userEntityList = userService.selectByParam(dao);
 //            LOG.info("userEntityList:" + JSON.toJSONString(userEntityList));
 //            if (userEntityList == null || userEntityList.size() == 0 || userEntityList.get(0) == null) {
 //                LOG.error("用户不存在或者token过期");
