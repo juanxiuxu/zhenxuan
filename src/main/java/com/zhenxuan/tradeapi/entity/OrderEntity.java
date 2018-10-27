@@ -53,7 +53,6 @@ public class OrderEntity extends Entity {
 
     private String payOrd;
 
-
     public String getOid() {
         return oid;
     }

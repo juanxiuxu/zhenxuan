@@ -1,6 +1,7 @@
 package com.zhenxuan.tradeapi.entity;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import com.zhenxuan.tradeapi.domain.GoodsSkuInfo;
 import com.zhenxuan.tradeapi.utils.JsonUtil;
 
 import java.util.List;
@@ -80,96 +81,17 @@ public class GoodsSpuItem extends Item {
 
     @DynamoDBAttribute(attributeName = "skus")
     @DynamoDBTypeConverted(converter = SkuInfoListConverter.class)
-    private List<SkuInfo> skuInfos;
+    private List<GoodsSkuInfo> skuInfos;
 
-    public static class SkuInfo {
-        // @DynamoDBAttribute(attributeName = "sid")
-        private String skuId;
-
-        // @DynamoDBAttribute(attributeName = "cashback")
-        private float cashback;
-
-        // @DynamoDBAttribute(attributeName = "price")
-        private float price;
-
-        // @DynamoDBAttribute(attributeName = "show")
-        private boolean show;
-
-        // @DynamoDBAttribute(attributeName = "stock")
-        private long stockCount;
-
-        // @DynamoDBAttribute(attributeName = "weight")
-        private int weight;
-
-        // @DynamoDBIgnore
-        private long salesCount;
-
-        public String getSkuId() {
-            return skuId;
-        }
-
-        public void setSkuId(String skuId) {
-            this.skuId = skuId;
-        }
-
-        public float getCashback() {
-            return cashback;
-        }
-
-        public void setCashback(float cashback) {
-            this.cashback = cashback;
-        }
-
-        public float getPrice() {
-            return price;
-        }
-
-        public void setPrice(float price) {
-            this.price = price;
-        }
-
-        public boolean isShow() {
-            return show;
-        }
-
-        public void setShow(boolean show) {
-            this.show = show;
-        }
-
-        public long getStockCount() {
-            return stockCount;
-        }
-
-        public void setStockCount(long stockCount) {
-            this.stockCount = stockCount;
-        }
-
-        public int getWeight() {
-            return weight;
-        }
-
-        public void setWeight(int weight) {
-            this.weight = weight;
-        }
-
-        public long getSalesCount() {
-            return salesCount;
-        }
-
-        public void setSalesCount(long salesCount) {
-            this.salesCount = salesCount;
-        }
-    }
-
-    public static class SkuInfoListConverter implements DynamoDBTypeConverter<String, List<SkuInfo> > {
+    public static class SkuInfoListConverter implements DynamoDBTypeConverter<String, List<GoodsSkuInfo> > {
         @Override
-        public String convert(List<SkuInfo> skuInfos) {
+        public String convert(List<GoodsSkuInfo> skuInfos) {
             return JsonUtil.toString(skuInfos);
         }
 
         @Override
-        public List<SkuInfo> unconvert(String data) {
-            return (List<GoodsSpuItem.SkuInfo>)JsonUtil.toObject(data, List.class);
+        public List<GoodsSkuInfo> unconvert(String data) {
+            return (List<GoodsSkuInfo>)JsonUtil.toObject(data, List.class);
         }
     }
 
@@ -256,11 +178,11 @@ public class GoodsSpuItem extends Item {
         this.goodsPrice = goodsPrice;
     }
 
-    public List<SkuInfo> getSkuInfos() {
+    public List<GoodsSkuInfo> getSkuInfos() {
         return skuInfos;
     }
 
-    public void setSkuInfos(List<SkuInfo> skuInfos) {
+    public void setSkuInfos(List<GoodsSkuInfo> skuInfos) {
         this.skuInfos = skuInfos;
     }
 

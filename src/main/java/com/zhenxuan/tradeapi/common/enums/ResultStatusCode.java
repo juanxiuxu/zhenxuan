@@ -41,13 +41,12 @@ public enum ResultStatusCode {
     SPUITEM_NOT_FOUND(6001, "spu item not found"),
     SKUITEMS_NOT_FOUND(6002, "sku items not found"),
     GOODS_DATA_ERROR(6003, "goods data error"),
-    NO_GOODS_FOR_SKUID(6004, "no goods for this skuId"),
-    GOODS_STOCK_NOT_ENOUGH(6005, "goods stock not enough"),
-    GOODS_NOT_SHOW(6006, "goods not show"),
-    CREATE_ORDER_FAILED(6007, "CREATE_ORDER_FAILED"),
-
-    //运输错误 7000开头
-    OUT_OF_DELIVERY_AREA(6007, "goods is out of delivery area");
+    NO_GOODS_FOR_SPUID(6004, "no goods for this spuId"),
+    NO_GOODS_FOR_SKUID(6005, "no goods for this skuId"),
+    GOODS_STOCK_NOT_ENOUGH(6006, "goods stock not enough"),
+    GOODS_NOT_SHOW(6007, "goods not show"),
+    CREATE_ORDER_FAILED(6008, "CREATE_ORDER_FAILED"),
+    OUT_OF_DELIVERY_AREA(6009, "goods is out of delivery area");
 
     public final int code;
     public final String desc;

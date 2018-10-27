@@ -36,7 +36,7 @@ public class CreateOrderDirectReqVo extends BaseAuthReqVo {
      */
     @NotBlank
     @JsonProperty("num")
-    private int purchseCount;
+    private int purchaseCount;
 
     /**
      * 优惠券码
@@ -100,12 +100,12 @@ public class CreateOrderDirectReqVo extends BaseAuthReqVo {
         this.country = country;
     }
 
-    public int getPurchseCount() {
-        return purchseCount;
+    public int getPurchaseCount() {
+        return purchaseCount;
     }
 
-    public void setPurchseCount(int purchseCount) {
-        this.purchseCount = purchseCount;
+    public void setPurchaseCount(int purchseCount) {
+        this.purchaseCount = purchseCount;
     }
 
     public String getCouponCode() {
