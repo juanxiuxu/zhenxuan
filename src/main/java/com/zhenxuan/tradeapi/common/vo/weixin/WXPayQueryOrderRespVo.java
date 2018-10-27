@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * 微信支付查询订单响应类
  */
-public class WXPayQueryOrderRespVo extends BaseWXPayVo {
+public class WXPayQueryOrderRespVo extends WXPayBaseVo {
 
 
     // 以下字段在return_code为SUCCESS的时候有返回

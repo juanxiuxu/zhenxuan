@@ -14,6 +14,7 @@ import com.google.common.collect.ImmutableMap;
 import com.zhenxuan.tradeapi.dao.entity.GoodsSpuItem;
 import com.zhenxuan.tradeapi.dao.entity.Item;
 import com.zhenxuan.tradeapi.dao.entity.ShopItem;
+import com.zhenxuan.tradeapi.domain.GoodsSkuInfo;
 import com.zhenxuan.tradeapi.utils.JsonUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -285,12 +286,12 @@ public class DynamoDbService {
         spuItem.setSpuId("spuid1");
         spuItem.setSkuId("0");
 
-        List<GoodsSpuItem.SkuInfo> skuInfos = new LinkedList<>();
-        GoodsSpuItem.SkuInfo skuInfo1 = new GoodsSpuItem.SkuInfo();
+        List<GoodsSkuInfo> skuInfos = new LinkedList<>();
+        GoodsSkuInfo skuInfo1 = new GoodsSkuInfo();
         skuInfo1.setSkuId("skuid1");
         skuInfo1.setSalesCount(1001);
         skuInfos.add(skuInfo1);
-        GoodsSpuItem.SkuInfo skuInfo2 = new GoodsSpuItem.SkuInfo();
+        GoodsSkuInfo skuInfo2 = new GoodsSkuInfo();
         skuInfo2.setSkuId("skuid2");
         skuInfo2.setSalesCount(1002);
         skuInfos.add(skuInfo2);
