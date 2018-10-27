@@ -27,7 +27,7 @@ public class UserLoginEntity extends Entity {
 
     private Date lastLogin;
 
-//    public UserLoginEntity from(LoginReqVo loginReqVo, UserWXInfoVo userWXInfoVo) {
+//    public UserLoginEntity from(LoginReqVo loginReqVo, UserWXInfo userWXInfoVo) {
 //        this.wxAppType = loginReqVo.getAppType();
 //        this.wxOpenId = userWXInfoVo.getOpenid();
 //        if (!"".equals(userWXInfoVo.getUnionId())) {

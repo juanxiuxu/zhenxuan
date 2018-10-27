@@ -1,11 +1,11 @@
-package com.zhenxuan.tradeapi.vo;
+package com.zhenxuan.tradeapi.domain;
 
 import com.zhenxuan.tradeapi.vo.weixin.WXCode2SessionRespVo;
 
 /**
  * 用户微信基本信息
  */
-public class UserWXInfoVo {
+public class UserWXInfo {
 
     private String openid;
 
@@ -13,7 +13,7 @@ public class UserWXInfoVo {
 
     private String unionId;
 
-    public UserWXInfoVo(WXCode2SessionRespVo respVo) {
+    public UserWXInfo(WXCode2SessionRespVo respVo) {
         this.openid = respVo.getOpenId();
         this.sessionKey = respVo.getSessionKey();
         this.unionId = respVo.getUnionId();

@@ -2,6 +2,7 @@ package com.zhenxuan.tradeapi.service.impl;
 
 import com.zhenxuan.tradeapi.common.ZXException;
 import com.zhenxuan.tradeapi.common.enums.ResultStatusCode;
+import com.zhenxuan.tradeapi.domain.UserWXInfo;
 import com.zhenxuan.tradeapi.entity.ShopItem;
 import com.zhenxuan.tradeapi.entity.UserAuthEntity;
 import com.zhenxuan.tradeapi.entity.UserLoginEntity;
@@ -58,10 +59,10 @@ public class UserServiceImpl implements UserService {
         LoginRespVo loginRespVo = new LoginRespVo();
         TokenHeaderVo tokenHeaderVo = new TokenHeaderVo();
 
-        UserWXInfoVo userWXInfoVo = wxLoginAuth.execute(loginReqVo.getCode());
+        UserWXInfo userWXInfo = wxLoginAuth.execute(loginReqVo.getCode());
 
         UserLoginEntity loginEntity = new UserLoginEntity();
-        boolean isNewUser = loginInternal(loginReqVo, userWXInfoVo, loginEntity);
+        boolean isNewUser = loginInternal(loginReqVo, userWXInfo, loginEntity);
         loginRespVo.setNewUser(isNewUser ? 1 : 0);
         String unionId = loginEntity.getUnionId();
         loginRespVo.setHasUnionId(!StringUtils.isEmpty(unionId));
@@ -104,29 +105,29 @@ public class UserServiceImpl implements UserService {
     /**
      * 登陆事务
      * @param loginReqVo
-     * @param userWXInfoVo
+     * @param userWXInfo
      * @return true: 新用户， false: 老用户
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public boolean loginInternal(LoginReqVo loginReqVo, UserWXInfoVo userWXInfoVo, UserLoginEntity userEntity) {
-        UserLoginEntity entity = userLoginMapper.selectEntityByUniqueKey(loginReqVo.getAppType(), userWXInfoVo.getOpenid());
+    public boolean loginInternal(LoginReqVo loginReqVo, UserWXInfo userWXInfo, UserLoginEntity userEntity) {
+        UserLoginEntity entity = userLoginMapper.selectEntityByUniqueKey(loginReqVo.getAppType(), userWXInfo.getOpenid());
         boolean isNewUser = (entity == null);
 
         if (entity == null) {
             UserLoginEntity newUser = new UserLoginEntity();
             newUser.setLoginUid(GlobalIdUtil.newLoginUid());
             newUser.setWxAppType(loginReqVo.getAppType());
-            newUser.setWxOpenId(userWXInfoVo.getOpenid());
-            newUser.setWxSessionKey(userWXInfoVo.getSessionKey());
-            newUser.setUnionId(userWXInfoVo.getUnionId());
+            newUser.setWxOpenId(userWXInfo.getOpenid());
+            newUser.setWxSessionKey(userWXInfo.getSessionKey());
+            newUser.setUnionId(userWXInfo.getUnionId());
             newUser.setLastLogin((new Date()));
             userLoginMapper.insertLoginInfo(newUser);
             userEntity.copyFrom(newUser);
 
         } else {
-            entity.setWxSessionKey(userWXInfoVo.getSessionKey());
+            entity.setWxSessionKey(userWXInfo.getSessionKey());
             if (StringUtils.isEmpty(entity.getUnionId())) {
-                entity.setUnionId(userWXInfoVo.getUnionId());
+                entity.setUnionId(userWXInfo.getUnionId());
             }
             entity.setLastLogin((new Date()));
             userLoginMapper.updateLoginInfoByUniqueKey(entity);

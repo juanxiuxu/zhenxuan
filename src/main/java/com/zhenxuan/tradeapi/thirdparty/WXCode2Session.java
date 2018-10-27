@@ -4,7 +4,7 @@ import com.google.common.base.Throwables;
 import com.zhenxuan.tradeapi.common.ZXException;
 import com.zhenxuan.tradeapi.common.http.HttpJSONHelper;
 import com.zhenxuan.tradeapi.common.enums.ResultStatusCode;
-import com.zhenxuan.tradeapi.vo.UserWXInfoVo;
+import com.zhenxuan.tradeapi.domain.UserWXInfo;
 import com.zhenxuan.tradeapi.vo.weixin.WXCode2SessionRespVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public class WXCode2Session {
     @Value("${wx.zhenxuan.secret}")
     public String wxZxSecret;
 
-    public UserWXInfoVo execute(String code) {
+    public UserWXInfo execute(String code) {
         WXCode2SessionRespVo respVo;
         int retry = 2;
         do {
@@ -45,13 +45,13 @@ public class WXCode2Session {
 
             switch (respVo.getErrCode()) {
                 case 0:
-                    return new UserWXInfoVo(respVo);
+                    return new UserWXInfo(respVo);
                 case 40029:
                     logger.error("invalid code of weixin session or code had been used");
                     throw new ZXException(ResultStatusCode.INVALID_CODE_ERROR);
 //                respVo.setOpenid("testOpenId");
 //                respVo.setSessionKey("testSessionKey");
-//                return new UserWXInfoVo(respVo);
+//                return new UserWXInfo(respVo);
                 case 40163:
                     logger.error("code of weixin session had been used");
                     throw new ZXException(ResultStatusCode.INVALID_CODE_ERROR);
