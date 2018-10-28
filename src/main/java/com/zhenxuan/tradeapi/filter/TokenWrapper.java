@@ -14,10 +14,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.*;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  *
@@ -109,7 +106,7 @@ public class TokenWrapper extends HttpServletRequestWrapper {
     }
 
     private Map<String, String[]> readReqParams(ServletRequest request) {
-        return request.getParameterMap();
+        return new HashMap<>(request.getParameterMap());
     }
 
     private byte[] readReqBody(ServletRequest request) {
@@ -147,6 +144,10 @@ public class TokenWrapper extends HttpServletRequestWrapper {
         }
 
         return null;
+    }
+
+    public void setParameter(String name, String value) {
+        originParams.put(name, new String[]{value});
     }
 }
 

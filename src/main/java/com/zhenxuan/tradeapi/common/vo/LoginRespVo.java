@@ -18,6 +18,7 @@ public class LoginRespVo {
     @JsonProperty("fwh_user")
     private int fwhUser;  // 0: false; 1: true
 
+    // TODO: fe remove
     @JsonProperty("uid")
     private String loginUid;
 

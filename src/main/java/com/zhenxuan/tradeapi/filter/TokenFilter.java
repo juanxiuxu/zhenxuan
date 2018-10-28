@@ -5,12 +5,10 @@ package com.zhenxuan.tradeapi.filter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zhenxuan.tradeapi.common.ResultBody;
+import com.zhenxuan.tradeapi.common.constants.Constants;
 import com.zhenxuan.tradeapi.common.enums.ResultStatusCode;
-import com.zhenxuan.tradeapi.utils.JsonUtil;
-import com.zhenxuan.tradeapi.utils.JwtUtil;
-import com.zhenxuan.tradeapi.common.vo.BaseAuthReqVo;
-import com.zhenxuan.tradeapi.common.vo.BaseLoginReqVo;
 import com.zhenxuan.tradeapi.common.vo.TokenHeaderVo;
+import com.zhenxuan.tradeapi.utils.JwtUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
@@ -46,6 +44,7 @@ public class TokenFilter implements Filter {
         authTokenVerifyUrl.add("/enter-store");
         authTokenVerifyUrl.add("/be-invited");
         authTokenVerifyUrl.add("/order/create-sku-direct");
+        authTokenVerifyUrl.add("/pay/wx/order");
     }
 
     @Value("${token.sign.secret}")
@@ -66,7 +65,7 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        logger.debug("path={}, token={}", path, token);
+        logger.info("path={}, token={}", path, token);
 
         TokenWrapper requestWrapper = new TokenWrapper(httpReq);
         ResultStatusCode failCode = null;
@@ -84,6 +83,7 @@ public class TokenFilter implements Filter {
                 failExtraMsg = "invalid token";
                 break;
             }
+            logger.info("path={}, token content={}", path, tokenHeaderVo);
 
             byte[] body = requestWrapper.getOriginBody();
             if (body == null) {
@@ -93,30 +93,20 @@ public class TokenFilter implements Filter {
             }
 
             if (loginTokenVerifyUrl.contains(path)) {
-                BaseLoginReqVo reqVo = JsonUtil.toObject(body, BaseLoginReqVo.class);
-                if (reqVo == null || StringUtils.isEmpty(reqVo.getLoginUid())) {
+                if (StringUtils.isEmpty(tokenHeaderVo.getLoginUid())) {
                     failCode = ResultStatusCode.PARAM_ERROR;
                     failExtraMsg = "no login uid in token";
                     break;
                 }
-                if (!reqVo.getLoginUid().equals(tokenHeaderVo.getLoginUid())) {
-                    failCode = ResultStatusCode.PARAM_ERROR;
-                    failExtraMsg = "login uid in token do not match the param in body";
-                    break;
-                }
+                requestWrapper.setParameter(Constants.LOGIN_UID, tokenHeaderVo.getLoginUid());
             }
             if (authTokenVerifyUrl.contains(path)) {
-                BaseAuthReqVo reqVo = JsonUtil.toObject(body, BaseAuthReqVo.class);
-                if (reqVo == null || StringUtils.isEmpty(reqVo.getAuthUid())) {
+                if (StringUtils.isEmpty(tokenHeaderVo.getAuthUid())) {
                     failCode = ResultStatusCode.PARAM_ERROR;
                     failExtraMsg = "no auth uid in token";
                     break;
                 }
-                if (!reqVo.getAuthUid().equals(tokenHeaderVo.getAuthUid())) {
-                    failCode = ResultStatusCode.PARAM_ERROR;
-                    failExtraMsg = "auth uid in token do not match the param in body";
-                    break;
-                }
+                requestWrapper.setParameter(Constants.AUTH_UID, tokenHeaderVo.getAuthUid());
             }
 
             break;

@@ -5,6 +5,7 @@ package com.zhenxuan.tradeapi.common.vo;
  */
 public class TokenHeaderVo {
 
+    // TODO: 迁完数据后，合并成一个uid
     private String loginUid;
 
     private String authUid;
@@ -53,5 +54,10 @@ public class TokenHeaderVo {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("loginUid=%s, authUid=%s, avatar=%s, userName=%s", loginUid, authUid, avatar, userName);
     }
 }
