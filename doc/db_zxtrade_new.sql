@@ -178,7 +178,7 @@ CREATE TABLE `tbl_pay_trade` (
   `amount` bigint(20) NOT NULL COMMENT '统一下单原始总金额',
   `prepay_id` varchar(255) NOT NULL COMMENT '微信发通知用',
   `ip` varchar(255) NOT NULL,
-   `result_code` varchar(255) NOT NULL COMMENT '微信支付业务结果',
+  `result_code` varchar(255) NOT NULL DEFAULT 'INIT' COMMENT '微信支付业务结果',
   `transaction_id` varchar(255) NOT NULL DEFAULT '' COMMENT '微信交易单号',
   `total_fee` bigint(20) NOT NULL DEFAULT 0 COMMENT '微信订单总金额',
   `fee_type` varchar(128) NOT NULL DEFAULT 'CNY' COMMENT '微信货币类型',
