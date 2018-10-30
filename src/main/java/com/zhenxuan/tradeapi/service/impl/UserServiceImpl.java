@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    @Value("${token.sign.expired}")
+    @Value("${token.sign.expired.sec}")
     private int tokenSignExpired;
 
     @Value("${token.sign.secret}")
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
 
         // 如果用户只存在于tbl_user_login中，则以该表为准，缺少authUid,member等关键的用户信息
         tokenHeaderVo.setLoginUid(loginEntity.getLoginUid());
-        loginRespVo.setToken(JwtUtil.sign(tokenHeaderVo, tokenSignExpired, tokenSignSecret));
+        loginRespVo.setToken(JwtUtil.sign(tokenHeaderVo, (long)tokenSignExpired * 1000, tokenSignSecret));
         loginRespVo.setLoginUid(loginEntity.getLoginUid());
 
         loginRespVo.setFwhUser(StringUtils.isEmpty(loginEntity.getFwhOpenId()) ? 0 : 1);

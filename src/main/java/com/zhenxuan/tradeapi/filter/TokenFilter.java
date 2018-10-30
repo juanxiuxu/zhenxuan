@@ -36,10 +36,10 @@ public class TokenFilter implements Filter {
 
     static {
         loginTokenVerifyUrl.add("/passport/user/bind-unionid-wa");
+        loginTokenVerifyUrl.add("/passport/user/have-unionid");
 
         authTokenVerifyUrl.add("/passport/user/info");
         authTokenVerifyUrl.add("/passport/user/update");
-        authTokenVerifyUrl.add("/passport/user/have-unionid");
         authTokenVerifyUrl.add("/passport/user/is_fwh_user");
         authTokenVerifyUrl.add("/enter-store");
         authTokenVerifyUrl.add("/be-invited");
