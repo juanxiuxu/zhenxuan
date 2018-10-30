@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhenxuan.tradeapi.dao.mapper.PayTradeMapper">
+
+    <resultMap id="BaseResultMap" type="com.zhenxuan.tradeapi.dao.entity.PayTradeEntity">
+        <id column="pay_trade_id" />
+        <result column="oid" />
+        <result column="auth_uid" />
+        <result column="amount" />
+        <result column="prepay_id" />
+        <result column="ip"/>
+        <result column="result_code" />
+        <result column="transaction_id" />
+        <result column="total_fee" />
+        <result column="fee_type" />
+        <result column="cash_fee" />
+        <result column="settlement_total_fee" />
+        <result column="is_subscribe" />
+        <result column="wx_open_id" />
+        <result column="product_descs" />
+        <result column="trade_type" />
+        <result column="bank_type" />
+        <result column="paid_at" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        pay_trade_id, oid, auth_uid, amount, prepay_id, ip, result_code, transaction_id, total_fee, fee_type, cash_fee, settlement_total_fee, is_subscribe, wx_open_id, product_desc, trade_type, bank_type, paid_at
+    </sql>
+
+    <sql id="Order_Column_List">
+        pay_trade_id, oid, auth_uid, amount, prepay_id, ip
+    </sql>
+
+    <sql id="PayNotify_Column_List">
+        ip, result_code, transaction_id, total_fee, fee_type, cash_fee, settlement_total_fee, is_subscribe, wx_open_id, product_desc, trade_type, bank_type, paid_at
+    </sql>
+
+    <!-- sql id="insert_columns">
+        <if test="oid != null">oid</if>
+        <if test="authUid != null">,auth_uid</if>
+        <if test="tid != null">,tid</if>
+        <if test="iuid != null">,iuid</if>
+        <if test="vip != null">,vip</if>
+        <if test="orderStatus != null">,order_status</if>
+        <if test="code != null">,code</if>
+        <if test="op != null">,op</if>
+        <if test="recheck != null">,recheck</if>
+        <if test="total != null">,total</if>
+        <if test="goodsTotal != null">,goods_total</if>
+        <if test="cashback != null">,cashback</if>
+        <if test="bonus != null">,bonus</if>
+        <if test="couponCode != null">,coupon_code</if>
+        <if test="freight != null">,freight</if>
+        <if test="freightDiscount != null">,freight_discount</if>
+        <if test="payment != null">,payment</if>
+        <if test="userBalanceConsume != null">,user_balance_consume</if>
+        <if test="discount != null">,discount</if>
+        <if test="actualPayment != null">,actual_payment</if>
+        <if test="paidAt != null">,paid_at</if>
+        <if test="payOrd != null">,pay_oid</if>
+        create_time,
+        update_time
+    </sql>
+
+
+    <sql id="insert_values">
+        <if test="oid != null">oid</if>
+        <if test="authUid != null">authUid</if>
+        <if test="tid != null">tid</if>
+        <if test="iuid != null">iuid</if>
+        <if test="vip != null">vip</if>
+        <if test="orderStatus != null">orderStatus</if>
+        <if test="code != null">code</if>
+        <if test="op != null">op</if>
+        <if test="recheck != null">recheck</if>
+        <if test="total != null">total</if>
+        <if test="goodsTotal != null">goodsTotal</if>
+        <if test="cashback != null">cashback</if>
+        <if test="bonus != null">bonus</if>
+        <if test="couponCode != null">couponCode</if>
+        <if test="freight != null">freight</if>
+        <if test="freightDiscount != null">freightDiscount</if>
+        <if test="payment != null">payment</if>
+        <if test="userBalanceConsume != null">userBalanceConsume</if>
+        <if test="discount != null">discount</if>
+        <if test="actualPayment != null">actualPayment</if>
+        <if test="paidAt != null">paidAt</if>
+        <if test="payOrd != null">payOrd</if>
+        now(),
+        now()
+    </sql -->
+
+    <insert id="insertOrderEntity"
+            parameterType="com.zhenxuan.tradeapi.dao.entity.PayTradeEntity">
+        insert into
+        tbl_pay_trade (
+        <include refid="Order_Column_List" />
+        ) values (
+            pay_trade_id = #{payTradeId,jdbcType=VARCHAR},
+            oid = #{oid,jdbcType=VARCHAR},
+            auth_uid = #{auth_uid,jdbcType=VARCHAR},
+            amount = #{amount,jdbcType=BIGINT},
+            prepay_id = #{prepayId,jdbcType=VARCHAR},
+            ip = #{ip,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="insertPayNotifyEntity"
+            parameterType="com.zhenxuan.tradeapi.dao.entity.PayTradeEntity">
+        insert into
+        tbl_pay_trade (
+        <include refid="PayNotify_Column_List" />
+        ) values (
+            result_code = #{resultCode,jdbcType=VARCHAR},
+            transaction_id = #{transactionId,jdbcType=VARCHAR},
+            total_fee = #{totalFee,jdbcType=BIGINT},
+            fee_type = #{feeType,jdbcType=VARCHAR},
+            cash_fee = #{cashFee,jdbcType=BIGINT},
+            settlement_total_fee = #{settlementTotalFee,jdbcType=BIGINT},
+            is_subscribe = #{isSubscribe,jdbcType=VARCHAR},
+            wx_open_id = #{wxOpenId,jdbcType=VARCHAR},
+            product_desc = #{productDesc,jdbcType=VARCHAR},
+            trade_type =  #{tradeType,jdbcType=VARCHAR},
+            bank_type, #{bankType,jdbcType=VARCHAR},
+            paid_at =  #{paidAt,jdbcType=VARCHAR},
+        )
+    </insert>
+</mapper>

@@ -1,12 +1,12 @@
 package com.zhenxuan.tradeapi.dao.mapper;
 
-import com.zhenxuan.tradeapi.dao.entity.PayTradeEnity;
+import com.zhenxuan.tradeapi.dao.entity.PayTradeEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public interface PayTradeMapper {
 
-    int insertOrderEntity(PayTradeEnity payTradeEnity);
+    int insertOrderEntity(PayTradeEntity payTradeEntity);
 
-    int insertPayNotifyEntity(PayTradeEnity payTradeEnity);
+    int insertPayNotifyEntity(PayTradeEntity payTradeEntity);
 }

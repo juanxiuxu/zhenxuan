@@ -118,4 +118,13 @@
         </where>
     </update>
 
+    <select id="selectEntityByOid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_order
+        <where>
+            oid = #{oid,jdbcType=VARCHAR}
+        </where>
+    </select>
+
 </mapper>

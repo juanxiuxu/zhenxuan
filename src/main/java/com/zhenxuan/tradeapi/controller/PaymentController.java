@@ -1,7 +1,9 @@
 package com.zhenxuan.tradeapi.controller;
 
+import com.zhenxuan.tradeapi.common.ResultBody;
 import com.zhenxuan.tradeapi.common.constants.Constants;
 import com.zhenxuan.tradeapi.common.vo.PayOrderReqVo;
+import com.zhenxuan.tradeapi.common.vo.PayOrderRespVo;
 import com.zhenxuan.tradeapi.service.PaymentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +32,9 @@ public class PaymentController {
     @RequestMapping(value = "/pay/wx/order", method = RequestMethod.POST)
     @ResponseBody
     public Object payOrder(@RequestBody PayOrderReqVo reqVo, @RequestParam(value = Constants.AUTH_UID) String uid) {
-        logger.info("payOrder----------{}, uid={}", reqVo, uid);
-        return "world";
+        reqVo.setAuthUid(uid);
+        PayOrderRespVo respVo = paymentService.payOrder(reqVo);
+        return ResultBody.success(respVo);
     }
 
 }

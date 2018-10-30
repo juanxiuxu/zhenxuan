@@ -20,4 +20,6 @@ public interface UserAuthMapper {
     int updateActionByUid(@Param("authUid") String authUid, @Param("tid") String tid,
                           @Param("iuid") String iuid, @Param("fwhOpenId") String fwhOpenId,
                           @Param("member") int member, @Param("expired") int expired);
+
+    int decreaseUserBalance(@Param("authUid") String authUid, @Param("amount") long amount);
 }

@@ -129,4 +129,16 @@
             </if>
         </where>
     </update>
+
+    <update id="decreaseUserBalance"
+            parameterType="map">
+        update tbl_user_auth
+        <set>
+            balance = balance - #{amount,jdbcType=BIGINT}
+        </set>
+        <where>
+            auth_uid = #{auth_uid,jdbcType=VARCHAR}
+            AND balance - #{amount,jdbcType=BIGINT} >= 0
+        </where>
+    </update>
 </mapper>

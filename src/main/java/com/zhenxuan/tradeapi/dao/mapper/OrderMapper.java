@@ -15,4 +15,5 @@ public interface OrderMapper {
 
     int updateOrderState(@Param("oid") String oid, @Param("orderStatus") int orderStatus, @Param("paidAt") Date paidAt);
 
+    OrderEntity selectEntityByOid(@Param("oid") String orderId);
 }

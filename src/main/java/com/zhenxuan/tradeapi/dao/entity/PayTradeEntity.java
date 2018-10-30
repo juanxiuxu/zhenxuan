@@ -1,11 +1,62 @@
 package com.zhenxuan.tradeapi.dao.entity;
 
+import com.zhenxuan.tradeapi.domain.WXUnifiedOrderInfo;
+import com.zhenxuan.tradeapi.utils.GlobalIdUtil;
+
 import java.util.Date;
 
 /**
  * 支付通道交易记录
  */
-public class PayTradeEnity {
+public class PayTradeEntity {
+
+    private String payTradeId;
+
+    private String orderId;
+
+    private String authUid;
+
+    private long amount;
+
+    private String prepayId;
+
+    private String ip;
+
+    private String resultCode; // 微信业务结果
+
+    private String transactionId;
+
+    private int totalFee;
+
+    private String feeType;
+
+    private int cashFee;
+
+    private int settlementTotalFee;
+
+    private String isSubscribe;
+
+    private String wxOpenId;
+
+    private String productDesc;
+
+    private String tradeType;
+
+    private String bankType;
+
+    private Date paidAt;
+
+    public static PayTradeEntity create(OrderEntity orderEntity, WXUnifiedOrderInfo wxOrderInfo) {
+        PayTradeEntity entity = new PayTradeEntity();
+        entity.setPayTradeId(GlobalIdUtil.newOrderId());
+        entity.setOrderId(orderEntity.getOid());
+        entity.setAuthUid(orderEntity.getAuthUid());
+        entity.setAmount(orderEntity.getTotal());
+        entity.setPrepayId(wxOrderInfo.getPrepayId());
+        entity.setIp(wxOrderInfo.getSpbillCreateIp());
+
+        return entity;
+    }
 
     public String getPayTradeId() {
         return payTradeId;
@@ -150,40 +201,4 @@ public class PayTradeEnity {
     public void setPaidAt(Date paidAt) {
         this.paidAt = paidAt;
     }
-
-    private String payTradeId;
-
-    private String orderId;
-
-    private String authUid;
-
-    private long amount;
-
-    private String prepayId;
-
-    private String ip;
-
-    private String resultCode; // 微信业务结果
-
-    private String transactionId;
-
-    private int totalFee;
-
-    private String feeType;
-
-    private int cashFee;
-
-    private int settlementTotalFee;
-
-    private String isSubscribe;
-
-    private String wxOpenId;
-
-    private String productDesc;
-
-    private String tradeType;
-
-    private String bankType;
-
-    private Date paidAt;
 }

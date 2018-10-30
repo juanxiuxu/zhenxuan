@@ -46,7 +46,13 @@ public enum ResultStatusCode {
     GOODS_STOCK_NOT_ENOUGH(6006, "goods stock not enough"),
     GOODS_NOT_SHOW(6007, "goods not show"),
     CREATE_ORDER_FAILED(6008, "CREATE_ORDER_FAILED"),
-    OUT_OF_DELIVERY_AREA(6009, "goods is out of delivery area");
+    OUT_OF_DELIVERY_AREA(6009, "goods is out of delivery area"),
+
+    // 支付错误 7000开头
+    ORDER_ID_NOT_EXISTS(7000, "orderid not exists"),
+    PARSE_WXPAY_RESP_FAILED(7001, "can not parse response from wxPay"),
+    WXPAY_RESP_SIGN_ERROR(7002, "response sign of wxPay error"),
+    USER_BALANCE_NOT_ENOUGH(7003, "user balance not enough");
 
     public final int code;
     public final String desc;

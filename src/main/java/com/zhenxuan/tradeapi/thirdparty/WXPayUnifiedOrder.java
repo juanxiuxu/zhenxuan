@@ -1,8 +1,11 @@
 package com.zhenxuan.tradeapi.thirdparty;
 
+import com.zhenxuan.tradeapi.common.ZXException;
+import com.zhenxuan.tradeapi.common.enums.ResultStatusCode;
 import com.zhenxuan.tradeapi.common.enums.SignConfig;
 import com.zhenxuan.tradeapi.common.http.HttpJSONHelper;
 import com.zhenxuan.tradeapi.dao.entity.OrderEntity;
+import com.zhenxuan.tradeapi.domain.WXUnifiedOrderInfo;
 import com.zhenxuan.tradeapi.utils.CommonUtil;
 import com.zhenxuan.tradeapi.utils.JsonUtil;
 import com.zhenxuan.tradeapi.common.vo.weixin.WXPayUnifiedOrderReqVo;
@@ -28,7 +31,13 @@ public class WXPayUnifiedOrder extends WXPayBaseRpc {
     @Value("${wx.pay.unifiedorder.notifyurl}")
     private String unifiedOrderNotifyUrl;
 
-    public void execute(OrderEntity orderEntity) {
+    /**
+     * 统一下单
+     * @param orderEntity
+     * @param wxPayRealFee
+     * @return WXUnifiedOrderInfo
+     */
+    public WXUnifiedOrderInfo execute(OrderEntity orderEntity, long wxPayRealFee) {
 
         WXPayUnifiedOrderReqVo payReqVo = new WXPayUnifiedOrderReqVo();
         payReqVo.setAppId(appId);
@@ -36,7 +45,7 @@ public class WXPayUnifiedOrder extends WXPayBaseRpc {
         payReqVo.setNonceStr(generateNonceStr());
         payReqVo.setBody("爱真选");
         payReqVo.setOrderId(orderEntity.getOid());
-        payReqVo.setTotalFee(orderEntity.getTotal());
+        payReqVo.setTotalFee((int)wxPayRealFee);
         payReqVo.setSpbillCreateIp(CommonUtil.getLocalIpAddr());
         payReqVo.setNotifyUrl(unifiedOrderNotifyUrl);
         payReqVo.setTradeType("JSAPI");
@@ -50,9 +59,15 @@ public class WXPayUnifiedOrder extends WXPayBaseRpc {
 
         WXPayUnifiedOrderRespVo respVo = processResponseXml(resp, WXPayUnifiedOrderRespVo.class);
         if (respVo == null) {
-            return;
+            logger.error("Fail to parse response in xml from weixin");
+            throw new ZXException(ResultStatusCode.PARSE_WXPAY_RESP_FAILED);
         }
 
-        wxPaySign.checkSign(SignConfig.WX_PAY_SIGN, resp, respVo.getSign());
+        if (!wxPaySign.checkSign(SignConfig.WX_PAY_SIGN, resp, respVo.getSign())) {
+            logger.error("checking sign of response from weixin is failed.");
+            throw new ZXException(ResultStatusCode.WXPAY_RESP_SIGN_ERROR);
+        }
+
+        return new WXUnifiedOrderInfo(respVo.getAppId(), respVo.getPrepayId(), CommonUtil.getLocalIpAddr());
     }
 }

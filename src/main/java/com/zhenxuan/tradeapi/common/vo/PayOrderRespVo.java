@@ -16,6 +16,48 @@ public class PayOrderRespVo {
 
         private String appId;
 
-        private long timeStamp;
+        // sprivate long timeStamp;
+
+        @JsonProperty("prepay_id")
+        private String prepayId;
+
+        public Payload() {}
+
+        public Payload(String appId, String prepayId) {
+            this.appId = appId;
+            this.prepayId = prepayId;
+        }
+
+        public String getAppId() {
+            return appId;
+        }
+
+        public void setAppId(String appId) {
+            this.appId = appId;
+        }
+
+        public String getPrepayId() {
+            return prepayId;
+        }
+
+        public void setPrepayId(String prepayId) {
+            this.prepayId = prepayId;
+        }
+    }
+
+    public Payload getPayload() {
+        return payload;
+    }
+
+    public void setPayload(Payload payload) {
+        this.payload = payload;
+    }
+
+    public boolean isAllBalance() {
+        return allBalance;
+    }
+
+    public void setAllBalance(boolean allBalance) {
+        this.allBalance = allBalance;
     }
 }

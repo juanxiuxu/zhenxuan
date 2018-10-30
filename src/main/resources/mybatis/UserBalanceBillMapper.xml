@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhenxuan.tradeapi.dao.mapper.UserBalanceBillMapper">
+
+    <resultMap id="BaseResultMap" type="com.zhenxuan.tradeapi.dao.entity.UserBalanceBillEntity">
+        <id column="bill_id" />
+        <result column="auth_uid" />
+        <result column="amount" />
+        <result column="income" />
+        <result column="init_balance"/>
+        <result column="final_balance" />
+        <result column="transaction_id" />
+        <result column="currency" />
+        <result column="complete_status" />
+        <result column="balance_status" />
+        <result column="cancel_status" />
+        <result column="completed_at" />
+        <result column="type" />
+        <result column="oid" />
+        <result column="pay_oid" />
+        <result column="describe" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        pay_trade_id, oid, auth_uid, amount, prepay_id, ip, result_code, transaction_id, total_fee, fee_type, cash_fee, settlement_total_fee, is_subscribe, wx_open_id, product_description, trade_type, bank_type, paid_at
+    </sql>
+
+    <!-- sql id="insert_columns">
+        <if test="oid != null">oid</if>
+        <if test="authUid != null">,auth_uid</if>
+        <if test="tid != null">,tid</if>
+        <if test="iuid != null">,iuid</if>
+        <if test="vip != null">,vip</if>
+        <if test="orderStatus != null">,order_status</if>
+        <if test="code != null">,code</if>
+        <if test="op != null">,op</if>
+        <if test="recheck != null">,recheck</if>
+        <if test="total != null">,total</if>
+        <if test="goodsTotal != null">,goods_total</if>
+        <if test="cashback != null">,cashback</if>
+        <if test="bonus != null">,bonus</if>
+        <if test="couponCode != null">,coupon_code</if>
+        <if test="freight != null">,freight</if>
+        <if test="freightDiscount != null">,freight_discount</if>
+        <if test="payment != null">,payment</if>
+        <if test="userBalanceConsume != null">,user_balance_consume</if>
+        <if test="discount != null">,discount</if>
+        <if test="actualPayment != null">,actual_payment</if>
+        <if test="paidAt != null">,paid_at</if>
+        <if test="payOrd != null">,pay_oid</if>
+        create_time,
+        update_time
+    </sql>
+
+
+    <sql id="insert_values">
+        <if test="oid != null">oid</if>
+        <if test="authUid != null">authUid</if>
+        <if test="tid != null">tid</if>
+        <if test="iuid != null">iuid</if>
+        <if test="vip != null">vip</if>
+        <if test="orderStatus != null">orderStatus</if>
+        <if test="code != null">code</if>
+        <if test="op != null">op</if>
+        <if test="recheck != null">recheck</if>
+        <if test="total != null">total</if>
+        <if test="goodsTotal != null">goodsTotal</if>
+        <if test="cashback != null">cashback</if>
+        <if test="bonus != null">bonus</if>
+        <if test="couponCode != null">couponCode</if>
+        <if test="freight != null">freight</if>
+        <if test="freightDiscount != null">freightDiscount</if>
+        <if test="payment != null">payment</if>
+        <if test="userBalanceConsume != null">userBalanceConsume</if>
+        <if test="discount != null">discount</if>
+        <if test="actualPayment != null">actualPayment</if>
+        <if test="paidAt != null">paidAt</if>
+        <if test="payOrd != null">payOrd</if>
+        now(),
+        now()
+    </sql -->
+
+    <insert id="insertEntity"
+            parameterType="com.zhenxuan.tradeapi.dao.entity.UserBalanceBillEntity">
+        insert into
+        tbl_user_balance_bill (
+        <include refid="Base_Column_List" />
+        ) values (
+            payTradeId, oid, authUid, amount, prepayId, ip
+        )
+    </insert>
+</mapper>

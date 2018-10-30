@@ -134,7 +134,8 @@ public class WXPayBaseRpc {
 
         } else {
             logger.error("invalid return_code:{}.", returnCode);
-            throw new RuntimeException(String.format("No `return_code` in XML: %s", xmlStr));
+//            throw new RuntimeException(String.format("No `return_code` in XML: %s", xmlStr));
+            return null;
         }
     }
 
