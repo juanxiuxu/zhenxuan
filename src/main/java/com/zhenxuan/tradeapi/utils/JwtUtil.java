@@ -78,7 +78,8 @@ public class JwtUtil {
         long age = 60*60*24 * 1000;
 
         TokenHeaderVo vo = new TokenHeaderVo();
-        vo.setLoginUid("myloguid");
+        // vo.setLoginUid("myloguid");
+        vo.setUid("myloguid");
         vo.setAvatar("http://pan.baidu.com");
         vo.setUserName("myusername");
 
@@ -87,6 +88,6 @@ public class JwtUtil {
 
         TokenHeaderVo newVo = JwtUtil.verity(token, TokenHeaderVo.class, secret);
         System.out.printf("loginUid=%s, avatar=%s, name=%s, authUid=%s\n",
-                newVo.getLoginUid(), newVo.getAvatar(), newVo.getUserName(), newVo.getAuthUid());
+                newVo.getUid(), newVo.getAvatar(), newVo.getUserName(), newVo.getUid());
     }
 }

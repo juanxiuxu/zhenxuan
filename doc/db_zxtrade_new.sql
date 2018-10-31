@@ -90,7 +90,7 @@ CREATE TABLE `tbl_order` (
   `order_status` int(11) unsigned NOT NULL,
   `code` varchar(255) NOT NULL DEFAULT 'INIT',
   `op` varchar(255) NOT NULL,
-  `check` varchar(255) NOT NULL DEFAULT 'ACCESS',
+  `recheck` varchar(255) NOT NULL DEFAULT 'ACCESS',
   `total` int(11) NOT NULL COMMENT '商品价格减去优惠折扣加上运费减去运费折扣后的价格',
   `goods_total` int(11) NOT NULL COMMENT '价格起始',
   `cashback` int(11) NOT NULL COMMENT 'member=2的用户需要从total直接减它得到最终价格',

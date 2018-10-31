@@ -49,7 +49,7 @@ public class OrderEntity extends Entity {
 
     private int actualPayment;
 
-    private Date payAt;
+    private Date paidAt;
 
     private String payOrd;
 
@@ -221,12 +221,12 @@ public class OrderEntity extends Entity {
         this.actualPayment = actualPayment;
     }
 
-    public Date getPayAt() {
-        return payAt;
+    public Date getPaidAt() {
+        return paidAt;
     }
 
-    public void setPayAt(Date payAt) {
-        this.payAt = payAt;
+    public void setPaidAt(Date paidAt) {
+        this.paidAt = paidAt;
     }
 
     public String getPayOrd() {

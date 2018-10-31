@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
             if (authEntity != null) {
                 logger.debug("user code:{} had authorized unionId. authUid:{}", loginReqVo.getCode(), authEntity.getAuthUid());
 
-                tokenHeaderVo.setAuthUid(authEntity.getAuthUid());
+                tokenHeaderVo.setUid(authEntity.getAuthUid());
                 tokenHeaderVo.setAvatar(authEntity.getAvatar());
                 tokenHeaderVo.setUserName(authEntity.getNickName());
 
@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // 如果用户只存在于tbl_user_login中，则以该表为准，缺少authUid,member等关键的用户信息
-        tokenHeaderVo.setLoginUid(loginEntity.getLoginUid());
+        tokenHeaderVo.setUid(loginEntity.getLoginUid());
         loginRespVo.setToken(JwtUtil.sign(tokenHeaderVo, (long)tokenSignExpired * 1000, tokenSignSecret));
         loginRespVo.setLoginUid(loginEntity.getLoginUid());
 

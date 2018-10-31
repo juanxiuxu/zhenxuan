@@ -93,20 +93,20 @@ public class TokenFilter implements Filter {
             }
 
             if (loginTokenVerifyUrl.contains(path)) {
-                if (StringUtils.isEmpty(tokenHeaderVo.getLoginUid())) {
+                if (StringUtils.isEmpty(tokenHeaderVo.getUid())) {
                     failCode = ResultStatusCode.PARAM_ERROR;
                     failExtraMsg = "no login uid in token";
                     break;
                 }
-                requestWrapper.setParameter(Constants.LOGIN_UID, tokenHeaderVo.getLoginUid());
+                requestWrapper.setParameter(Constants.LOGIN_UID, tokenHeaderVo.getUid());
             }
             if (authTokenVerifyUrl.contains(path)) {
-                if (StringUtils.isEmpty(tokenHeaderVo.getAuthUid())) {
+                if (StringUtils.isEmpty(tokenHeaderVo.getUid())) {
                     failCode = ResultStatusCode.PARAM_ERROR;
                     failExtraMsg = "no auth uid in token";
                     break;
                 }
-                requestWrapper.setParameter(Constants.AUTH_UID, tokenHeaderVo.getAuthUid());
+                requestWrapper.setParameter(Constants.AUTH_UID, tokenHeaderVo.getUid());
             }
 
             break;
