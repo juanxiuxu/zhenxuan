@@ -33,8 +33,6 @@ public class UserBalanceBillEntity extends Entity {
 
     private String orderId;
 
-    private String payTradeId;
-
     private String desc;
 
     public static UserBalanceBillEntity create() {
@@ -149,14 +147,6 @@ public class UserBalanceBillEntity extends Entity {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
-    }
-
-    public String getPayTradeId() {
-        return payTradeId;
-    }
-
-    public void setPayTradeId(String payTradeId) {
-        this.payTradeId = payTradeId;
     }
 
     public String getDesc() {

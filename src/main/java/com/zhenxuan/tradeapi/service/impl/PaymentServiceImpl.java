@@ -104,7 +104,6 @@ public class PaymentServiceImpl implements PaymentService {
         billEntity.setAmount(balancePayFee);
         billEntity.setDesc("余额消费");
         billEntity.setOrderId(orderEntity.getOid());
-        billEntity.setPayTradeId(tradeEntity.getPayTradeId());
         billEntity.setInitBalance(authEntity.getBalance());
         billEntity.setFinalBalance(authEntity.getBalance() - balancePayFee);
 
@@ -148,11 +147,18 @@ public class PaymentServiceImpl implements PaymentService {
             return respVo;
         }
 
-        WXPayResultInfo resultInfo = wxPayUnifiedOrderNotify.execute(notifyXml);
+        WXPayResultInfo wxResult = wxPayUnifiedOrderNotify.execute(notifyXml);
 
-        PayTradeEntity payTradeEntity = new PayTradeEntity();
+        String orderId = wxResult.getOrderId();
+        PayTradeEntity oldTradeEntity = payTradeMapper.selectEntityByOid(orderId);
+        if (oldTradeEntity == null) {
+            logger.error("pay trade not exists by orderId:[{}]", orderId);
+            respVo.setReturnCode(WXPayBaseVo.WXPayRespCode.FAIL.code);
+            return respVo;
+        }
 
-        payTradeMapper.insertPayNotifyEntity();
+        PayTradeEntity newTradeEntity = PayTradeEntity.create(wxResult);
+        payTradeMapper.updatePayNotifyResult(newTradeEntity);
 
         respVo.setReturnCode(WXPayBaseVo.WXPayRespCode.SUCCESS.code);
         return respVo;

@@ -17,12 +17,11 @@
         <result column="completed_at" />
         <result column="type" />
         <result column="oid" />
-        <result column="pay_oid" />
         <result column="describe" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        pay_trade_id, oid, auth_uid, amount, prepay_id, ip, result_code, transaction_id, total_fee, fee_type, cash_fee, settlement_total_fee, is_subscribe, wx_open_id, product_desc, trade_type, bank_type, paid_at
+        bill_id, auth_uid, amount, incode
     </sql>
 
     <!-- sql id="insert_columns">
@@ -86,7 +85,7 @@
         tbl_user_balance_bill (
         <include refid="Base_Column_List" />
         ) values (
-            payTradeId, oid, authUid, amount, prepayId, ip
+            oid, authUid, amount, prepayId, ip
         )
     </insert>
 </mapper>

@@ -3,8 +3,7 @@
 <mapper namespace="com.zhenxuan.tradeapi.dao.mapper.PayTradeMapper">
 
     <resultMap id="BaseResultMap" type="com.zhenxuan.tradeapi.dao.entity.PayTradeEntity">
-        <id column="pay_trade_id" />
-        <result column="oid" />
+        <id column="oid" />
         <result column="auth_uid" />
         <result column="amount" />
         <result column="prepay_id" />
@@ -24,15 +23,26 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        pay_trade_id, oid, auth_uid, amount, prepay_id, ip, result_code, transaction_id, total_fee, fee_type, cash_fee, settlement_total_fee, is_subscribe, wx_open_id, product_desc, trade_type, bank_type, paid_at
+        oid, auth_uid, amount, prepay_id, ip, result_code, transaction_id, total_fee, fee_type, cash_fee, settlement_total_fee, is_subscribe, wx_open_id, product_desc, trade_type, bank_type, paid_at
     </sql>
 
     <sql id="Order_Column_List">
-        pay_trade_id, oid, auth_uid, amount, prepay_id, ip
+        oid, auth_uid, amount, prepay_id, ip
     </sql>
 
     <sql id="PayNotify_Column_List">
-        result_code, transaction_id, total_fee, fee_type, cash_fee, settlement_total_fee, is_subscribe, wx_open_id, product_desc, trade_type, bank_type, paid_at
+        <if test="result_code != null">resultCode</if>
+        <if test="transaction_id != null">transactionId</if>
+        <if test="total_fee != 0">totalFee</if>
+        <if test="fee_type != null">feeType</if>
+        <if test="cash_fee != 0">cashFee</if>
+        <if test="settlement_total_fee != 0">settlementTotalFee</if>
+        <if test="is_subscribe != null">isSubscribe</if>
+        <if test="wx_open_id != null">wxOpenId</if>
+        <if test="product_desc != null">productDesc</if>
+        <if test="trade_type != null">tradeType</if>
+        <if test="bank_type != null">bankType</if>
+        <if test="paid_at != null">paidAt</if>
     </sql>
 
     <!-- sql id="insert_columns">
@@ -96,7 +106,6 @@
         tbl_pay_trade (
         <include refid="Order_Column_List" />
         ) values (
-            #{payTradeId,jdbcType=VARCHAR},
             #{orderId,jdbcType=VARCHAR},
             #{authUid,jdbcType=VARCHAR},
             #{amount,jdbcType=BIGINT},
@@ -105,24 +114,35 @@
         )
     </insert>
 
-    <insert id="insertPayNotifyEntity"
+    <update id="updatePayNotifyResult"
             parameterType="com.zhenxuan.tradeapi.dao.entity.PayTradeEntity">
-        insert into
+        update
         tbl_pay_trade (
-        <include refid="PayNotify_Column_List" />
-        ) values (
-            #{resultCode,jdbcType=VARCHAR},
-            #{transactionId,jdbcType=VARCHAR},
-            #{totalFee,jdbcType=BIGINT},
-            #{feeType,jdbcType=VARCHAR},
-            #{cashFee,jdbcType=BIGINT},
-            #{settlementTotalFee,jdbcType=BIGINT},
-            #{isSubscribe,jdbcType=VARCHAR},
-            #{wxOpenId,jdbcType=VARCHAR},
-            #{productDesc,jdbcType=VARCHAR},
-            #{tradeType,jdbcType=VARCHAR},
-            #{bankType,jdbcType=VARCHAR},
-            #{paidAt,jdbcType=VARCHAR}
-        )
-    </insert>
+        <set>
+            <if test="result_code != null">result_code = #{resultCode,jdbcType=VARCHAR},</if>
+            <if test="transaction_id != null">transaction_id = #{transactionId,jdbcType=VARCHAR},</if>
+            <if test="total_fee != 0">total_fee = #{totalFee,jdbcType=BIGINT},</if>
+            <if test="fee_type != null">fee_type = #{feeType,jdbcType=VARCHAR},</if>
+            <if test="cash_fee != 0">cash_fee = #{cashFee,jdbcType=BIGINT},</if>
+            <if test="settlement_total_fee != 0">settlement_total_fee = #{settlementTotalFee,jdbcType=BIGINT},</if>
+            <if test="is_subscribe != null">is_subscribe = #{isSubscribe,jdbcType=VARCHAR},</if>
+            <if test="wx_open_id != null">wx_open_id = #{wxOpenId,jdbcType=VARCHAR},</if>
+            <if test="product_desc != null">product_desc = #{productDesc,jdbcType=VARCHAR},</if>
+            <if test="trade_type != null">trade_type = #{tradeType,jdbcType=VARCHAR},</if>
+            <if test="bank_type != null">bank_type = #{bankType,jdbcType=VARCHAR},</if>
+            <if test="paid_at != null">paid_at = #{paidAt,jdbcType=VARCHAR}</if>
+        </set>
+        <where>
+            oid = #{orderId,jdbcType=VARCHAR}
+        </where>
+    </update>
+
+    <select id="selectEntityByOid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_pay_trade
+        <where>
+            oid = #{orderId,jdbcType=VARCHAR}
+        </where>
+    </select>
 </mapper>

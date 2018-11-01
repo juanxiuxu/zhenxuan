@@ -51,6 +51,7 @@ public class WXPayUnifiedOrderNotify extends WXPayBaseRpc {
                     notifyReqVo.getErrCode(), notifyReqVo.getErrCodeDesc());
             throw new ZXException(ResultStatusCode.UNKNOWN_WXPAY_NOTIFY);
         }
+        logger.info("Pay Order notify result info is {}", payResultInfo);
 
         return payResultInfo;
     }

@@ -4,9 +4,8 @@ import com.zhenxuan.tradeapi.common.ResultBody;
 import com.zhenxuan.tradeapi.common.constants.Constants;
 import com.zhenxuan.tradeapi.common.vo.PayOrderReqVo;
 import com.zhenxuan.tradeapi.common.vo.PayOrderRespVo;
-import com.zhenxuan.tradeapi.common.vo.weixin.WXPayDirectNotifyReqVo;
+import com.zhenxuan.tradeapi.common.vo.weixin.WXPayDirectNotifyRespVo;
 import com.zhenxuan.tradeapi.service.PaymentService;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +41,8 @@ public class PaymentController {
     @RequestMapping(value = "/pay/unifiedorder/notify", method = RequestMethod.POST)
     @ResponseBody
     public Object payOrderNotify(@RequestBody String notifyXml) {
-        paymentService.payOrderNotify(notifyXml);
+        logger.debug("notifyXml:{}", notifyXml);
+        WXPayDirectNotifyRespVo respVo = paymentService.payOrderNotify(notifyXml);
+        return respVo;
     }
 }

@@ -1,54 +1,40 @@
 package com.zhenxuan.tradeapi.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.zhenxuan.tradeapi.common.vo.weixin.WXPayBaseVo;
 import com.zhenxuan.tradeapi.common.vo.weixin.WXPayDirectNotifyReqVo;
+import com.zhenxuan.tradeapi.utils.JsonUtil;
 
 /**
  * 支付下单的结果模型
  */
 public class WXPayResultInfo {
 
-    @JsonProperty("result_code")
     private String resultCode;
 
-    @JsonProperty("is_subscribe")
     private String isSubscribe;
 
-    @JsonProperty("openid")
     private String openId;
 
-    @JsonProperty("trade_type")
     private String tradeType;
 
-    @JsonProperty("bank_type")
     private String bankType;
 
-    @JsonProperty("total_fee")
     private long totalFee; // int
 
-    @JsonProperty("settlement_total_fee")
     private long settlementTotalFee; // int
 
-    @JsonProperty("fee_type")
     private String feeType;
 
-    @JsonProperty("cash_fee")
     private long cashFee; // int
 
-    @JsonProperty("cash_fee_type")
     private String cashFeeType;
 
-    @JsonProperty("transaction_id")
     private String transactionId;
 
-    @JsonProperty("out_trade_no")
     private String orderId;
 
-    @JsonProperty("attach")
     private String productDesc;
 
-    @JsonProperty("time_end")
     private String paidAt;
 
     public static WXPayResultInfo create(WXPayDirectNotifyReqVo notifyReqVo) {
@@ -185,5 +171,10 @@ public class WXPayResultInfo {
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    @Override
+    public String toString() {
+        return JsonUtil.toString(this);
     }
 }

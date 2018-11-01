@@ -303,3 +303,15 @@ CREATE TABLE `tbl_z_temp_user` (
   `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+LOCK TABLES `tbl_order` WRITE;
+INSERT INTO `tbl_order` (oid, auth_uid, tid, iuid, vip, order_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount, actual_payment) VALUES ('myoid1','jIWQp/Z/AABb1HdmAAAAAgE=','0','0',0,1,'INIT','myop1','ACCESS',1,1,0,0,'couponcode1',0,0,0,1,0,0,0);
+UNLOCK TABLES;
+
+LOCK TABLES `tbl_user_login` WRITE;
+INSERT INTO `tbl_user_login` (login_uid, wx_app_type, wx_open_id, balance, unionid, fwh_open_id, tid, iuid, wx_session_key, last_login) VALUES ('jIWQp/Z/AABb1HdmAAAAAgE=','zx','ou68u5WC7Ddj2LFD1kP2g-ZLqB-k',0,'oyHH21X4Tc40UcYL5SKYs9-SEFx8','','','','mwt+M+TUZ89pwjLhPW/rRw==','2018-10-30 14:56:36');
+UNLOCK TABLES;
+
+LOCK TABLES `tbl_user_auth` WRITE;
+INSERT INTO `tbl_user_auth` (auth_uid, unionid, wx_app_type, wx_open_id, balance, member, fwh_open_id, expired, tid, iuid, card_id, bank_name, bank_code, real_name, phone, avatar, nick_name, gender) VALUES ('jIWQp/Z/AABb1HdmAAAAAgE=','oyHH21X4Tc40UcYL5SKYs9-SEFx8','zx','ou68u5WC7Ddj2LFD1kP2g-ZLqB-k',0,0,'',0,'0','','','','','','','https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKQhvZnudZW3OzIYHh1snq4vwZqOlOBKZaicujhQcoJTAxs0e6dN9bu3pxZFl5JsZjia0z5iaNIL09hg/132','silencehere',1);
+UNLOCK TABLES;

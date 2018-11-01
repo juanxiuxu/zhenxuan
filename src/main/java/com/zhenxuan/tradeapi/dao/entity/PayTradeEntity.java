@@ -1,16 +1,12 @@
 package com.zhenxuan.tradeapi.dao.entity;
 
+import com.zhenxuan.tradeapi.domain.WXPayResultInfo;
 import com.zhenxuan.tradeapi.domain.WXUnifiedOrderInfo;
-import com.zhenxuan.tradeapi.utils.GlobalIdUtil;
-
-import java.util.Date;
 
 /**
  * 支付通道交易记录
  */
 public class PayTradeEntity {
-
-    private String payTradeId;
 
     private String orderId;
 
@@ -26,13 +22,13 @@ public class PayTradeEntity {
 
     private String transactionId;
 
-    private int totalFee;
+    private long totalFee;
 
     private String feeType;
 
-    private int cashFee;
+    private long cashFee;
 
-    private int settlementTotalFee;
+    private long settlementTotalFee;
 
     private String isSubscribe;
 
@@ -44,11 +40,10 @@ public class PayTradeEntity {
 
     private String bankType;
 
-    private Date paidAt;
+    private String paidAt;
 
     public static PayTradeEntity create(OrderEntity orderEntity, WXUnifiedOrderInfo wxOrderInfo) {
         PayTradeEntity entity = new PayTradeEntity();
-        entity.setPayTradeId(GlobalIdUtil.newOrderId());
         entity.setOrderId(orderEntity.getOid());
         entity.setAuthUid(orderEntity.getAuthUid());
         entity.setAmount(orderEntity.getTotal());
@@ -58,12 +53,23 @@ public class PayTradeEntity {
         return entity;
     }
 
-    public String getPayTradeId() {
-        return payTradeId;
-    }
+    public static PayTradeEntity create(WXPayResultInfo resultInfo) {
+        PayTradeEntity entity = new PayTradeEntity();
+        entity.setOrderId(resultInfo.getOrderId());
+        entity.setResultCode(resultInfo.getResultCode());
+        entity.setTransactionId(resultInfo.getTransactionId());
+        entity.setTotalFee(resultInfo.getTotalFee());
+        entity.setFeeType(resultInfo.getFeeType());
+        entity.setCashFee(resultInfo.getCashFee());
+        entity.setSettlementTotalFee(resultInfo.getSettlementTotalFee());
+        entity.setIsSubscribe(resultInfo.getIsSubscribe());
+        entity.setWxOpenId(resultInfo.getOpenId());
+        entity.setProductDesc(resultInfo.getProductDesc());
+        entity.setTradeType(resultInfo.getTradeType());
+        entity.setBankType(resultInfo.getBankType());
+        entity.setPaidAt(resultInfo.getPaidAt());
 
-    public void setPayTradeId(String payTradeId) {
-        this.payTradeId = payTradeId;
+        return entity;
     }
 
     public String getOrderId() {
@@ -122,11 +128,11 @@ public class PayTradeEntity {
         this.transactionId = transactionId;
     }
 
-    public int getTotalFee() {
+    public long getTotalFee() {
         return totalFee;
     }
 
-    public void setTotalFee(int totalFee) {
+    public void setTotalFee(long totalFee) {
         this.totalFee = totalFee;
     }
 
@@ -138,11 +144,11 @@ public class PayTradeEntity {
         this.feeType = feeType;
     }
 
-    public int getCashFee() {
+    public long getCashFee() {
         return cashFee;
     }
 
-    public void setCashFee(int cashFee) {
+    public void setCashFee(long cashFee) {
         this.cashFee = cashFee;
     }
 
@@ -162,11 +168,11 @@ public class PayTradeEntity {
         this.productDesc = productDesc;
     }
 
-    public int getSettlementTotalFee() {
+    public long getSettlementTotalFee() {
         return settlementTotalFee;
     }
 
-    public void setSettlementTotalFee(int settlementTotalFee) {
+    public void setSettlementTotalFee(long settlementTotalFee) {
         this.settlementTotalFee = settlementTotalFee;
     }
 
@@ -194,11 +200,11 @@ public class PayTradeEntity {
         this.bankType = bankType;
     }
 
-    public Date getPaidAt() {
+    public String getPaidAt() {
         return paidAt;
     }
 
-    public void setPaidAt(Date paidAt) {
+    public void setPaidAt(String paidAt) {
         this.paidAt = paidAt;
     }
 }
