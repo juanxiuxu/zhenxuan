@@ -32,7 +32,7 @@
     </sql>
 
     <sql id="PayNotify_Column_List">
-        ip, result_code, transaction_id, total_fee, fee_type, cash_fee, settlement_total_fee, is_subscribe, wx_open_id, product_desc, trade_type, bank_type, paid_at
+        result_code, transaction_id, total_fee, fee_type, cash_fee, settlement_total_fee, is_subscribe, wx_open_id, product_desc, trade_type, bank_type, paid_at
     </sql>
 
     <!-- sql id="insert_columns">
@@ -96,12 +96,12 @@
         tbl_pay_trade (
         <include refid="Order_Column_List" />
         ) values (
-            pay_trade_id = #{payTradeId,jdbcType=VARCHAR},
-            oid = #{orderId,jdbcType=VARCHAR},
-            auth_uid = #{authUid,jdbcType=VARCHAR},
-            amount = #{amount,jdbcType=BIGINT},
-            prepay_id = #{prepayId,jdbcType=VARCHAR},
-            ip = #{ip,jdbcType=VARCHAR}
+            #{payTradeId,jdbcType=VARCHAR},
+            #{orderId,jdbcType=VARCHAR},
+            #{authUid,jdbcType=VARCHAR},
+            #{amount,jdbcType=BIGINT},
+            #{prepayId,jdbcType=VARCHAR},
+            #{ip,jdbcType=VARCHAR}
         )
     </insert>
 
@@ -111,18 +111,18 @@
         tbl_pay_trade (
         <include refid="PayNotify_Column_List" />
         ) values (
-            result_code = #{resultCode,jdbcType=VARCHAR},
-            transaction_id = #{transactionId,jdbcType=VARCHAR},
-            total_fee = #{totalFee,jdbcType=BIGINT},
-            fee_type = #{feeType,jdbcType=VARCHAR},
-            cash_fee = #{cashFee,jdbcType=BIGINT},
-            settlement_total_fee = #{settlementTotalFee,jdbcType=BIGINT},
-            is_subscribe = #{isSubscribe,jdbcType=VARCHAR},
-            wx_open_id = #{wxOpenId,jdbcType=VARCHAR},
-            product_desc = #{productDesc,jdbcType=VARCHAR},
-            trade_type =  #{tradeType,jdbcType=VARCHAR},
-            bank_type = #{bankType,jdbcType=VARCHAR},
-            paid_at =  #{paidAt,jdbcType=VARCHAR},
+            #{resultCode,jdbcType=VARCHAR},
+            #{transactionId,jdbcType=VARCHAR},
+            #{totalFee,jdbcType=BIGINT},
+            #{feeType,jdbcType=VARCHAR},
+            #{cashFee,jdbcType=BIGINT},
+            #{settlementTotalFee,jdbcType=BIGINT},
+            #{isSubscribe,jdbcType=VARCHAR},
+            #{wxOpenId,jdbcType=VARCHAR},
+            #{productDesc,jdbcType=VARCHAR},
+            #{tradeType,jdbcType=VARCHAR},
+            #{bankType,jdbcType=VARCHAR},
+            #{paidAt,jdbcType=VARCHAR}
         )
     </insert>
 </mapper>
