@@ -4,6 +4,8 @@ import com.zhenxuan.tradeapi.common.ZXException;
 import com.zhenxuan.tradeapi.common.enums.ResultStatusCode;
 import com.zhenxuan.tradeapi.common.vo.PayOrderReqVo;
 import com.zhenxuan.tradeapi.common.vo.PayOrderRespVo;
+import com.zhenxuan.tradeapi.common.vo.weixin.WXPayBaseVo;
+import com.zhenxuan.tradeapi.common.vo.weixin.WXPayDirectNotifyRespVo;
 import com.zhenxuan.tradeapi.dao.entity.OrderEntity;
 import com.zhenxuan.tradeapi.dao.entity.PayTradeEntity;
 import com.zhenxuan.tradeapi.dao.entity.UserAuthEntity;
@@ -12,10 +14,13 @@ import com.zhenxuan.tradeapi.dao.mapper.OrderMapper;
 import com.zhenxuan.tradeapi.dao.mapper.PayTradeMapper;
 import com.zhenxuan.tradeapi.dao.mapper.UserAuthMapper;
 import com.zhenxuan.tradeapi.dao.mapper.UserBalanceBillMapper;
+import com.zhenxuan.tradeapi.domain.WXPayResultInfo;
 import com.zhenxuan.tradeapi.domain.WXUnifiedOrderInfo;
 import com.zhenxuan.tradeapi.service.PaymentService;
 import com.zhenxuan.tradeapi.thirdparty.WXPayUnifiedOrder;
+import com.zhenxuan.tradeapi.thirdparty.WXPayUnifiedOrderNotify;
 import com.zhenxuan.tradeapi.utils.GlobalIdUtil;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +40,9 @@ public class PaymentServiceImpl implements PaymentService {
     private WXPayUnifiedOrder wxPayUnifiedOrder;
 
     @Autowired
+    private WXPayUnifiedOrderNotify wxPayUnifiedOrderNotify;
+
+    @Autowired
     private OrderMapper orderMapper;
 
     @Autowired
@@ -46,6 +54,11 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private UserBalanceBillMapper userBalanceBillMapper;
 
+    /**
+     * 支付下单
+     * @param reqVo
+     * @return
+     */
     @Override
     public PayOrderRespVo payOrder(PayOrderReqVo reqVo) {
         OrderEntity orderEntity = orderMapper.selectEntityByOid(reqVo.getOrderId());
@@ -122,5 +135,26 @@ public class PaymentServiceImpl implements PaymentService {
         return balancePayFee;
     }
 
+    /**
+     * 支付结果回调
+     * @param
+     * @return
+     */
+    @Override
+    public WXPayDirectNotifyRespVo payOrderNotify(String notifyXml) {
+        WXPayDirectNotifyRespVo respVo = new WXPayDirectNotifyRespVo();
+        if (StringUtils.isEmpty(notifyXml)) {
+            respVo.setReturnCode(WXPayBaseVo.WXPayRespCode.FAIL.code);
+            return respVo;
+        }
 
+        WXPayResultInfo resultInfo = wxPayUnifiedOrderNotify.execute(notifyXml);
+
+        PayTradeEntity payTradeEntity = new PayTradeEntity();
+
+        payTradeMapper.insertPayNotifyEntity();
+
+        respVo.setReturnCode(WXPayBaseVo.WXPayRespCode.SUCCESS.code);
+        return respVo;
+    }
 }

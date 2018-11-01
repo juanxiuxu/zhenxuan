@@ -46,25 +46,25 @@ public class WXPayDirectNotifyReqVo extends WXPayBaseVo {
     private String bankType;
 
     @JsonProperty("total_fee")
-    private int totalFee;
+    private String totalFee; // int
 
     @JsonProperty("settlement_total_fee")
-    private int settlementTotalFee;
+    private String settlementTotalFee; // int
 
     @JsonProperty("fee_type")
     private String feeType;
 
     @JsonProperty("cash_fee")
-    private int cashFee;
+    private String cashFee; // int
 
     @JsonProperty("cash_fee_type")
     private String cashFeeType;
 
     @JsonProperty("coupon_fee")
-    private int couponFee;
+    private String couponFee; // int
 
     @JsonProperty("coupon_count")
-    private int couponCount;
+    private String couponCount; // int
 
     @JsonProperty("coupon_type_$n")
     private String couponType$n;
@@ -191,19 +191,19 @@ public class WXPayDirectNotifyReqVo extends WXPayBaseVo {
         this.bankType = bankType;
     }
 
-    public int getTotalFee() {
+    public String getTotalFee() {
         return totalFee;
     }
 
-    public void setTotalFee(int totalFee) {
+    public void setTotalFee(String totalFee) {
         this.totalFee = totalFee;
     }
 
-    public int getSettlementTotalFee() {
+    public String getSettlementTotalFee() {
         return settlementTotalFee;
     }
 
-    public void setSettlementTotalFee(int settlementTotalFee) {
+    public void setSettlementTotalFee(String settlementTotalFee) {
         this.settlementTotalFee = settlementTotalFee;
     }
 
@@ -215,11 +215,11 @@ public class WXPayDirectNotifyReqVo extends WXPayBaseVo {
         this.feeType = feeType;
     }
 
-    public int getCashFee() {
+    public String getCashFee() {
         return cashFee;
     }
 
-    public void setCashFee(int cashFee) {
+    public void setCashFee(String cashFee) {
         this.cashFee = cashFee;
     }
 
@@ -231,19 +231,19 @@ public class WXPayDirectNotifyReqVo extends WXPayBaseVo {
         this.cashFeeType = cashFeeType;
     }
 
-    public int getCouponFee() {
+    public String getCouponFee() {
         return couponFee;
     }
 
-    public void setCouponFee(int couponFee) {
+    public void setCouponFee(String couponFee) {
         this.couponFee = couponFee;
     }
 
-    public int getCouponCount() {
+    public String getCouponCount() {
         return couponCount;
     }
 
-    public void setCouponCount(int couponCount) {
+    public void setCouponCount(String couponCount) {
         this.couponCount = couponCount;
     }
 

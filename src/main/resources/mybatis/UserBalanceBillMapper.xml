@@ -22,7 +22,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        pay_trade_id, oid, auth_uid, amount, prepay_id, ip, result_code, transaction_id, total_fee, fee_type, cash_fee, settlement_total_fee, is_subscribe, wx_open_id, product_description, trade_type, bank_type, paid_at
+        pay_trade_id, oid, auth_uid, amount, prepay_id, ip, result_code, transaction_id, total_fee, fee_type, cash_fee, settlement_total_fee, is_subscribe, wx_open_id, product_desc, trade_type, bank_type, paid_at
     </sql>
 
     <!-- sql id="insert_columns">
