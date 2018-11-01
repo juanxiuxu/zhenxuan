@@ -125,10 +125,10 @@ public class WXPayBaseRpc {
         T respObj = JsonUtil.convert(respData, clazz);
 
         String returnCode = respObj.getReturnCode();
-        if (WXPayBaseVo.WXPayRespCode.SUCCESS.equals(returnCode)) {
+        if (WXPayBaseVo.WXPayRespCode.SUCCESS.code.equals(returnCode)) {
             return respObj;
 
-        } else if (WXPayBaseVo.WXPayRespCode.FAIL.equals(returnCode)) {
+        } else if (WXPayBaseVo.WXPayRespCode.FAIL.code.equals(returnCode)) {
             logger.error("WXPay response's return fail msg is {}", respObj.getReturnMsg());
             return null;
 

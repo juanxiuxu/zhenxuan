@@ -4,8 +4,6 @@ import com.zhenxuan.tradeapi.dao.entity.OrderEntity;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-
 @Component
 public interface OrderMapper {
 
@@ -13,7 +11,7 @@ public interface OrderMapper {
 
     int insertOrder(OrderEntity orderEntity);
 
-    int updateOrderState(@Param("oid") String oid, @Param("orderStatus") int orderStatus, @Param("paidAt") Date paidAt);
+    int updateOrderState(@Param("oid") String oid, @Param("orderStatus") int orderStatus);
 
     OrderEntity selectEntityByOid(@Param("oid") String orderId);
 }

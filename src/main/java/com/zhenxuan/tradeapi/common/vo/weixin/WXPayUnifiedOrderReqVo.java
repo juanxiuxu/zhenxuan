@@ -38,7 +38,7 @@ public class WXPayUnifiedOrderReqVo  {
     private String feeType;
 
     @JsonProperty("total_fee")
-    private int totalFee;
+    private String totalFee; // int
 
     @JsonProperty("spbill_create_ip")
     private String spbillCreateIp;
@@ -155,11 +155,11 @@ public class WXPayUnifiedOrderReqVo  {
         this.feeType = feeType;
     }
 
-    public int getTotalFee() {
+    public String getTotalFee() {
         return totalFee;
     }
 
-    public void setTotalFee(int totalFee) {
+    public void setTotalFee(String totalFee) {
         this.totalFee = totalFee;
     }
 

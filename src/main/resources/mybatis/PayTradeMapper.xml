@@ -97,8 +97,8 @@
         <include refid="Order_Column_List" />
         ) values (
             pay_trade_id = #{payTradeId,jdbcType=VARCHAR},
-            oid = #{oid,jdbcType=VARCHAR},
-            auth_uid = #{auth_uid,jdbcType=VARCHAR},
+            oid = #{orderId,jdbcType=VARCHAR},
+            auth_uid = #{authUid,jdbcType=VARCHAR},
             amount = #{amount,jdbcType=BIGINT},
             prepay_id = #{prepayId,jdbcType=VARCHAR},
             ip = #{ip,jdbcType=VARCHAR}
@@ -121,7 +121,7 @@
             wx_open_id = #{wxOpenId,jdbcType=VARCHAR},
             product_desc = #{productDesc,jdbcType=VARCHAR},
             trade_type =  #{tradeType,jdbcType=VARCHAR},
-            bank_type, #{bankType,jdbcType=VARCHAR},
+            bank_type = #{bankType,jdbcType=VARCHAR},
             paid_at =  #{paidAt,jdbcType=VARCHAR},
         )
     </insert>

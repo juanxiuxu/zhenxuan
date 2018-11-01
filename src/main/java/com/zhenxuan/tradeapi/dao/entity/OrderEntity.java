@@ -1,7 +1,5 @@
 package com.zhenxuan.tradeapi.dao.entity;
 
-import java.util.Date;
-
 /**
  * 订单记录
  */
@@ -46,12 +44,6 @@ public class OrderEntity extends Entity {
     private int userBalanceConsume;
 
     private int discount;
-
-    private int actualPayment;
-
-    private Date paidAt;
-
-    private String payOrd;
 
     public String getOid() {
         return oid;
@@ -212,29 +204,4 @@ public class OrderEntity extends Entity {
     public void setDiscount(int discount) {
         this.discount = discount;
     }
-
-    public int getActualPayment() {
-        return actualPayment;
-    }
-
-    public void setActualPayment(int actualPayment) {
-        this.actualPayment = actualPayment;
-    }
-
-    public Date getPaidAt() {
-        return paidAt;
-    }
-
-    public void setPaidAt(Date paidAt) {
-        this.paidAt = paidAt;
-    }
-
-    public String getPayOrd() {
-        return payOrd;
-    }
-
-    public void setPayOrd(String payOrd) {
-        this.payOrd = payOrd;
-    }
-
 }

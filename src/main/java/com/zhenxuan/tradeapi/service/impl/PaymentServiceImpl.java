@@ -63,7 +63,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         long balancePayFee = calcBalancePayFee(orderEntity,authEntity, reqVo);
         long wxPayFee = orderEntity.getTotal() - balancePayFee;
-        WXUnifiedOrderInfo wxOrderInfo = wxPayUnifiedOrder.execute(orderEntity, wxPayFee);
+        WXUnifiedOrderInfo wxOrderInfo = wxPayUnifiedOrder.execute(orderEntity, authEntity.getWxOpenId(), wxPayFee);
 
         if (reqVo.isUseBalance() && balancePayFee != 0) {
             payWithBalance(orderEntity, wxOrderInfo, authEntity, balancePayFee);

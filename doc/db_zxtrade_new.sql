@@ -103,8 +103,6 @@ CREATE TABLE `tbl_order` (
   `user_balance_consume` int(11) NOT NULL COMMENT '余额消耗',
   `discount` int(11) NOT NULL,
   `actual_payment` int(11) NOT NULL COMMENT '暂无用',
-  `paid_at` datetime NOT NULL,
-  `pay_oid` varchar(255) NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`oid`)

@@ -37,7 +37,7 @@ public abstract class Sign {
      * @return
      */
     public String buildSign(SignConfig config, Map<String, Object> params) {
-        return buildSign(config, params);
+        return buildSignImpl(config, params);
     }
 
     /**

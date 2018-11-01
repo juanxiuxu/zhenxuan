@@ -52,7 +52,8 @@ public enum ResultStatusCode {
     ORDER_ID_NOT_EXISTS(7000, "orderid not exists"),
     PARSE_WXPAY_RESP_FAILED(7001, "can not parse response from wxPay"),
     WXPAY_RESP_SIGN_ERROR(7002, "response sign of wxPay error"),
-    USER_BALANCE_NOT_ENOUGH(7003, "user balance not enough");
+    USER_BALANCE_NOT_ENOUGH(7003, "user balance not enough"),
+    BUILD_SIGN_FAILED(7004, "build sign is failed.");
 
     public final int code;
     public final String desc;

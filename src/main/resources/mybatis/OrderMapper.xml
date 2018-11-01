@@ -23,12 +23,10 @@
         <result column="payment" property="payment" />
         <result column="user_balance_consume" property="userBalanceConsume" />
         <result column="discount" property="discount" />
-        <result column="paid_at" property="paidAt" />
-        <result column="pay_oid" property="payOid" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        oid, auth_uid, tid, iuid, vip, order_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount, paid_at, pay_oid
+        oid, auth_uid, tid, iuid, vip, order_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount
     </sql>
 
     <sql id="insert_columns">
@@ -51,11 +49,6 @@
         <if test="payment != null">,payment</if>
         <if test="userBalanceConsume != null">,user_balance_consume</if>
         <if test="discount != null">,discount</if>
-        <if test="actualPayment != null">,actual_payment</if>
-        <if test="paidAt != null">,paid_at</if>
-        <if test="payOrd != null">,pay_oid</if>
-        create_time,
-        update_time
     </sql>
 
 
@@ -79,11 +72,6 @@
         <if test="payment != null">payment</if>
         <if test="userBalanceConsume != null">userBalanceConsume</if>
         <if test="discount != null">discount</if>
-        <if test="actualPayment != null">actualPayment</if>
-        <if test="paidAt != null">paidAt</if>
-        <if test="payOrd != null">payOrd</if>
-        now(),
-        now()
     </sql>
 
 
@@ -111,7 +99,6 @@
         update tbl_order
         <set>
             <if test="orderStatus != null">order_status = #{orderStatus,jdbcType=INTEGER},</if>
-            <if test="paidAt != null">paid_at = #{paidAt,jdbcType=VARCHAR}</if>
         </set>
         <where>
             oid = #{oid,jdbcType=VARCHAR}

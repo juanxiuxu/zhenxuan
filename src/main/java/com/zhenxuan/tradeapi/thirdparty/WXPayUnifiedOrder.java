@@ -37,23 +37,30 @@ public class WXPayUnifiedOrder extends WXPayBaseRpc {
      * @param wxPayRealFee
      * @return WXUnifiedOrderInfo
      */
-    public WXUnifiedOrderInfo execute(OrderEntity orderEntity, long wxPayRealFee) {
+    public WXUnifiedOrderInfo execute(OrderEntity orderEntity, String wxOpenId, long wxPayRealFee) {
 
         WXPayUnifiedOrderReqVo payReqVo = new WXPayUnifiedOrderReqVo();
         payReqVo.setAppId(appId);
         payReqVo.setMerchantId(merchantId);
         payReqVo.setNonceStr(generateNonceStr());
         payReqVo.setBody("爱真选");
+        payReqVo.setOpenId(wxOpenId);
         payReqVo.setOrderId(orderEntity.getOid());
-        payReqVo.setTotalFee((int)wxPayRealFee);
+        payReqVo.setTotalFee(String.valueOf(wxPayRealFee));
         payReqVo.setSpbillCreateIp(CommonUtil.getLocalIpAddr());
         payReqVo.setNotifyUrl(unifiedOrderNotifyUrl);
         payReqVo.setTradeType("JSAPI");
+        payReqVo.setSignType(SignConfig.WX_PAY_SIGN.signMethod.des);
 
         String sign = wxPaySign.buildSign(SignConfig.WX_PAY_SIGN, payReqVo);
+        if (sign == null) {
+            logger.error("can not build sign");
+            throw new ZXException(ResultStatusCode.BUILD_SIGN_FAILED);
+        }
         payReqVo.setSign(sign);
 
         String body = mapToXml(JsonUtil.convert(payReqVo, Map.class));
+        logger.debug("body={}", body);
         String resp = HttpJSONHelper.instance().post(unifiedOrderUrl, body, "UTF-8");
         logger.info("WXPay unifiedOrder resp is {}", resp);
 
@@ -63,7 +70,7 @@ public class WXPayUnifiedOrder extends WXPayBaseRpc {
             throw new ZXException(ResultStatusCode.PARSE_WXPAY_RESP_FAILED);
         }
 
-        if (!wxPaySign.checkSign(SignConfig.WX_PAY_SIGN, resp, respVo.getSign())) {
+        if (!wxPaySign.checkSign(SignConfig.WX_PAY_SIGN, respVo, respVo.getSign())) {
             logger.error("checking sign of response from weixin is failed.");
             throw new ZXException(ResultStatusCode.WXPAY_RESP_SIGN_ERROR);
         }
