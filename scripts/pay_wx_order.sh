@@ -2,5 +2,5 @@
 
 source config.sh
 
-curl -v -H"Content-Type:application/json" -H"x-access-token:"$TOKEN -XPOST -d '{"oid":"myoid2", "use_balance":false}' "http://127.0.0.1:9091/pay/wx/order"
+curl -v -H"Content-Type:application/json" -H"x-access-token:"$TOKEN -XPOST -d '{"oid":"myoid1", "use_balance":false}' "http://127.0.0.1:9091/pay/wx/order"
 

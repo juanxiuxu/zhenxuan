@@ -306,6 +306,8 @@ CREATE TABLE `tbl_z_temp_user` (
 
 LOCK TABLES `tbl_order` WRITE;
 INSERT INTO `tbl_order` (oid, auth_uid, tid, iuid, vip, order_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount, actual_payment) VALUES ('myoid1','jIWQp/Z/AABb1HdmAAAAAgE=','0','0',0,1,'INIT','myop1','ACCESS',1,1,0,0,'couponcode1',0,0,0,1,0,0,0);
+INSERT INTO `tbl_order` (oid, auth_uid, tid, iuid, vip, order_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount, actual_payment) VALUES ('myoid2','jIWQp/Z/AABb1HdmAAAAAgE=','0','0',0,1,'INIT','myop1','ACCESS',1,1,0,0,'couponcode1',0,0,0,1,0,0,0);
+INSERT INTO `tbl_order` (oid, auth_uid, tid, iuid, vip, order_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount, actual_payment) VALUES ('myoid3','jIWQp/Z/AABb1HdmAAAAAgE=','0','0',0,1,'INIT','myop1','ACCESS',1,1,0,0,'couponcode1',0,0,0,1,0,0,0);
 UNLOCK TABLES;
 
 LOCK TABLES `tbl_user_login` WRITE;
