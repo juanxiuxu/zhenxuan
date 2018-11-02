@@ -340,6 +340,12 @@
                     <httpConnector>
                         <port>9091</port>
                     </httpConnector>
+                    <systemProperties>
+                        <systemProperty>
+                            <name>org.eclipse.jetty.annotations.maxWait</name>
+                            <value>240</value>
+                        </systemProperty>
+                    </systemProperties>
                 </configuration>
             </plugin>
             <plugin>
