@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -267,5 +268,36 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return cachebackedTid;
+    }
+
+    public static class MyGoods {
+        public MyGoods(String id) {
+            this.id = id;
+        }
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String id;
+    }
+    public static void main(String[] args) {
+        List<MyGoods> goodsList = new LinkedList<>();
+        goodsList.add(new MyGoods("id1"));
+        goodsList.add(new MyGoods("id2"));
+       // goodsList.add(new MyGoods("id2"));
+        goodsList.add(new MyGoods("id3"));
+
+        Map<String, MyGoods> googdsMap = Maps.uniqueIndex(goodsList, new Function<MyGoods, String>(){
+            @Override
+            public String apply(MyGoods myGoods) {
+                return myGoods.getId();
+            }
+        });
+
+        System.out.print(googdsMap);
     }
 }
