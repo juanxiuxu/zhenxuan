@@ -3,6 +3,8 @@ package com.zhenxuan.tradeapi.common.vo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * sku直接下单请求类
  */
@@ -34,7 +36,7 @@ public class CreateOrderDirectReqVo extends BaseAuthReqVo {
     /**
      * 购买数量
      */
-    @NotBlank
+    @NotNull
     @JsonProperty("num")
     private int purchaseCount;
 
