@@ -26,7 +26,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        oid, auth_uid, tid, iuid, vip, order_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount, pay_trade_id, paid_at 
+        oid, auth_uid, tid, iuid, vip, order_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount
     </sql>
 
     <sql id="insert_columns">
