@@ -1,5 +1,6 @@
 #!/bin/sh
 
+export HOST="http://java-t.cn-northwest-1.eb.amazonaws.com.cn"
 export CODE="021RcuB61T8jKT1SSOz61AwCB61RcuBy"
 
 #export TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoie1wibG9naW5VaWRcIjpcImpJV1FwL1ovQUFCYjFIZG1BQUFBQWdFPVwiLFwiYXV0aFVpZFwiOm51bGwsXCJhdmF0YXJcIjpudWxsLFwidXNlck5hbWVcIjpudWxsfSIsImV4cCI6MjQwNDg2NzA2M30.fNjRdFTxL6hftV0yAuGsrik7EuG9beoBYkXzRi_1wqU"
