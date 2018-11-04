@@ -28,7 +28,7 @@ public class WXPayUnifiedOrder extends WXPayBaseRpc {
 
     private final String WX_ORDER_EXPIRE_FORMAT = "yyyyMMddHHmmss";
 
-    @Value("${wx.pay.prepayid.expire.ms}")
+    @Value("${wx.pay.prepayid.expired.ms}")
     private long wxPrepayIdExpireMS;
 
     @Value("${wx.pay.unifiedorder}")
