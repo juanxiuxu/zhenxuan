@@ -121,18 +121,6 @@
         update
         tbl_pay_trade (
         <set>
-            <!--result_code = #{resultCode,jdbcType=VARCHAR},</if>
-            <if test="transaction_id != null">transaction_id = #{transactionId,jdbcType=VARCHAR},</if>
-            <if test="total_fee != 0">total_fee = #{totalFee,jdbcType=BIGINT},</if>
-            <if test="fee_type != null">fee_type = #{feeType,jdbcType=VARCHAR},</if>
-            <if test="cash_fee != 0">cash_fee = #{cashFee,jdbcType=BIGINT},</if>
-            <if test="settlement_total_fee != 0">settlement_total_fee = #{settlementTotalFee,jdbcType=BIGINT},</if>
-            <if test="is_subscribe != null">is_subscribe = #{isSubscribe,jdbcType=VARCHAR},</if>
-            <if test="wx_open_id != null">wx_open_id = #{wxOpenId,jdbcType=VARCHAR},</if>
-            <if test="product_desc != null">product_desc = #{productDesc,jdbcType=VARCHAR},</if>
-            <if test="trade_type != null">trade_type = #{tradeType,jdbcType=VARCHAR},</if>
-            <if test="bank_type != null">bank_type = #{bankType,jdbcType=VARCHAR},</if>
-            <if test="paid_at != null">paid_at = #{paidAt,jdbcType=VARCHAR}</if -->
             result_code = #{resultCode,jdbcType=VARCHAR},
             transaction_id = #{transactionId,jdbcType=VARCHAR},
             total_fee = #{totalFee,jdbcType=BIGINT},
