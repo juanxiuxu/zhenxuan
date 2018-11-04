@@ -3,24 +3,24 @@
 <mapper namespace="com.zhenxuan.tradeapi.dao.mapper.PayTradeMapper">
 
     <resultMap id="BaseResultMap" type="com.zhenxuan.tradeapi.dao.entity.PayTradeEntity">
-        <id column="pay_trade_id" />
-        <result column="oid" />
-        <result column="auth_uid" />
-        <result column="amount" />
-        <result column="prepay_id" />
-        <result column="ip"/>
-        <result column="result_code" />
-        <result column="transaction_id" />
-        <result column="total_fee" />
-        <result column="fee_type" />
-        <result column="cash_fee" />
-        <result column="settlement_total_fee" />
-        <result column="is_subscribe" />
-        <result column="wx_open_id" />
-        <result column="product_descs" />
-        <result column="trade_type" />
-        <result column="bank_type" />
-        <result column="paid_at" />
+        <id column="pay_trade_id" property="payTradeId" />
+        <result column="oid" property="orderId"  />
+        <result column="auth_uid" property="authUid" />
+        <result column="amount" property="amount"/>
+        <result column="prepay_id" property="prepayId" />
+        <result column="ip" property="ip"/>
+        <result column="result_code" property="resultCode"/>
+        <result column="transaction_id" property="transactionId"/>
+        <result column="total_fee" property="totalFee"/>
+        <result column="fee_type" property="feeType"/>
+        <result column="cash_fee" property="cashFee"/>
+        <result column="settlement_total_fee" property="settlementTotalFee"/>
+        <result column="is_subscribe" property="isSubscribe"/>
+        <result column="wx_open_id" property="wxOpenId"/>
+        <result column="product_desc" property="productDesc"/>
+        <result column="trade_type" property="tradeType"/>
+        <result column="bank_type" property="bankType"/>
+        <result column="paid_at" property="paidAt"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -31,7 +31,7 @@
         pay_trade_id, oid, auth_uid, amount, prepay_id, ip
     </sql>
 
-    <sql id="PayNotify_Column_List">
+    <!-- sql id="PayNotify_Column_List">
         <if test="result_code != null">resultCode</if>
         <if test="transaction_id != null">transactionId</if>
         <if test="total_fee != 0">totalFee</if>
@@ -44,7 +44,7 @@
         <if test="trade_type != null">tradeType</if>
         <if test="bank_type != null">bankType</if>
         <if test="paid_at != null">paidAt</if>
-    </sql>
+    </sql -->
 
     <!-- sql id="insert_columns">
         <if test="oid != null">oid</if>
@@ -151,9 +151,8 @@
         </where>
     </update>
 
-    <select id="selectEntityByOid"
-            resultMap="BaseResultMap"
-            parameterType="java.lang.String">
+    <select id="selectEntityByOid" resultMap="BaseResultMap"
+            parameterType="map">
         select
         <include refid="Base_Column_List" />
         from tbl_pay_trade
