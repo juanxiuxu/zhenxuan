@@ -9,24 +9,20 @@ import com.zhenxuan.tradeapi.common.vo.weixin.WXPayDirectNotifyRespVo;
 import com.zhenxuan.tradeapi.dao.entity.OrderEntity;
 import com.zhenxuan.tradeapi.dao.entity.PayTradeEntity;
 import com.zhenxuan.tradeapi.dao.entity.UserAuthEntity;
-import com.zhenxuan.tradeapi.dao.entity.UserBalanceBillEntity;
 import com.zhenxuan.tradeapi.dao.mapper.OrderMapper;
 import com.zhenxuan.tradeapi.dao.mapper.PayTradeMapper;
 import com.zhenxuan.tradeapi.dao.mapper.UserAuthMapper;
-import com.zhenxuan.tradeapi.dao.mapper.UserBalanceBillMapper;
 import com.zhenxuan.tradeapi.domain.WXPayResultInfo;
 import com.zhenxuan.tradeapi.domain.WXUnifiedOrderInfo;
 import com.zhenxuan.tradeapi.service.PaymentService;
 import com.zhenxuan.tradeapi.thirdparty.WXPayUnifiedOrder;
 import com.zhenxuan.tradeapi.thirdparty.WXPayUnifiedOrderNotify;
-import com.zhenxuan.tradeapi.utils.GlobalIdUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 支付服务实现类
@@ -51,8 +47,8 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private UserAuthMapper userAuthMapper;
 
-    @Autowired
-    private UserBalanceBillMapper userBalanceBillMapper;
+    @Value("${wx.zhenxuan.appid}")
+    protected String appId;
 
     /**
      * 支付下单
@@ -61,6 +57,12 @@ public class PaymentServiceImpl implements PaymentService {
      */
     @Override
     public PayOrderRespVo payOrder(PayOrderReqVo reqVo) {
+        // 临时禁止余额支付
+        if (reqVo.isUseBalance()) {
+            logger.info("can not pay with balance. because it's not security");
+            throw new ZXException(ResultStatusCode.CANNOT_PAY_WITH_BALANCE);
+        }
+
         OrderEntity orderEntity = orderMapper.selectEntityByOid(reqVo.getOrderId());
         if (orderEntity == null) {
             logger.error("order not exists. orderId:{}", reqVo.getOrderId());
@@ -74,65 +76,77 @@ public class PaymentServiceImpl implements PaymentService {
             throw new ZXException(ResultStatusCode.USER_NOT_EXISTS);
         }
 
-        long balancePayFee = calcBalancePayFee(orderEntity,authEntity, reqVo);
-        long wxPayFee = orderEntity.getTotal() - balancePayFee;
-        WXUnifiedOrderInfo wxOrderInfo = wxPayUnifiedOrder.execute(orderEntity, authEntity.getWxOpenId(), wxPayFee);
-
-        if (reqVo.isUseBalance() && balancePayFee != 0) {
-            payWithBalance(orderEntity, wxOrderInfo, authEntity, balancePayFee);
-        } else {
-            payWithWX(orderEntity, wxOrderInfo);
-        }
-
         PayOrderRespVo respVo = new PayOrderRespVo();
-        respVo.setAllBalance(wxPayFee == 0);
-        respVo.setPayload(new PayOrderRespVo.Payload(wxOrderInfo.getAppId(), wxOrderInfo.getPrepayId()));
+        respVo.setAllBalance(false);
+
+        PayTradeEntity tradeEntity = payTradeMapper.selectEntityByOid(orderEntity.getOid());
+        if (tradeEntity != null) {
+            respVo.setPayload(new PayOrderRespVo.Payload(appId, tradeEntity.getPrepayId()));
+        } else {
+            long wxPayFee = orderEntity.getTotal();
+            WXUnifiedOrderInfo wxOrderInfo = wxPayUnifiedOrder.execute(orderEntity, authEntity.getWxOpenId(), wxPayFee);
+            PayTradeEntity newTradeEntity = PayTradeEntity.create(orderEntity, wxOrderInfo);
+            // TODO: catch duplicated exception, and return do not pay same order again
+            payTradeMapper.insertOrderEntity(newTradeEntity);
+            respVo.setPayload(new PayOrderRespVo.Payload(wxOrderInfo.getAppId(), wxOrderInfo.getPrepayId()));
+        }
 
         return respVo;
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void payWithBalance(OrderEntity orderEntity, WXUnifiedOrderInfo wxOrderInfo,
-                                 UserAuthEntity authEntity, long balancePayFee) {
-        PayTradeEntity tradeEntity = PayTradeEntity.create(orderEntity, wxOrderInfo);
-        payTradeMapper.insertOrderEntity(tradeEntity);
+//    @Transactional(propagation = Propagation.REQUIRED)
+//    public void payWithWXAndBalance(OrderEntity orderEntity, WXUnifiedOrderInfo wxOrderInfo,
+//                                    UserAuthEntity authEntity, long balancePayFee) {
+//        PayTradeEntity tradeEntity = PayTradeEntity.create(orderEntity, wxOrderInfo);
+//        payTradeMapper.insertOrderEntity(tradeEntity);
+//
+//        UserBalanceBillEntity billEntity = new UserBalanceBillEntity();
+//        billEntity.setBillId(GlobalIdUtil.newOrderId());
+//        billEntity.setAuthUid(authEntity.getAuthUid());
+//        billEntity.setIncome(1);
+//        billEntity.setAmount(balancePayFee);
+//        billEntity.setDesc("余额消费");
+//        billEntity.setOrderId(orderEntity.getOid());
+//        billEntity.setInitBalance(authEntity.getBalance());
+//        billEntity.setFinalBalance(authEntity.getBalance() - balancePayFee);
+//
+//        userBalanceBillMapper.insertEntity(billEntity);
+//        int result = userAuthMapper.decreaseUserBalance(authEntity.getAuthUid(), balancePayFee);
+//        if (result == 0) {
+//            throw new ZXException(ResultStatusCode.USER_BALANCE_NOT_ENOUGH);
+//        }
+//    }
 
-        UserBalanceBillEntity billEntity = new UserBalanceBillEntity();
-        billEntity.setBillId(GlobalIdUtil.newOrderId());
-        billEntity.setAuthUid(authEntity.getAuthUid());
-        billEntity.setIncome(1);
-        billEntity.setAmount(balancePayFee);
-        billEntity.setDesc("余额消费");
-        billEntity.setOrderId(orderEntity.getOid());
-        billEntity.setInitBalance(authEntity.getBalance());
-        billEntity.setFinalBalance(authEntity.getBalance() - balancePayFee);
-
-        userBalanceBillMapper.insertEntity(billEntity);
-        int result = userAuthMapper.decreaseUserBalance(authEntity.getAuthUid(), balancePayFee);
-        if (result == 0) {
-            throw new ZXException(ResultStatusCode.USER_BALANCE_NOT_ENOUGH);
-        }
-    }
-
-    private void payWithWX(OrderEntity orderEntity, WXUnifiedOrderInfo wxOrderInfo) {
-        PayTradeEntity tradeEntity = PayTradeEntity.create(orderEntity, wxOrderInfo);
-        payTradeMapper.insertOrderEntity(tradeEntity);
-    }
-
-    private long calcBalancePayFee(OrderEntity orderEntity, UserAuthEntity authEntity, PayOrderReqVo reqVo) {
-        long balancePayFee;
-        long orderTotalFee = orderEntity.getTotal();
-        if (reqVo.isUseBalance()) {
-            if (authEntity.getBalance() <= orderTotalFee) {
-                balancePayFee = authEntity.getBalance();
-            } else {
-                balancePayFee = orderTotalFee;
-            }
-        } else {
-            balancePayFee = 0;
-        }
-        return balancePayFee;
-    }
+//    @Transactional(propagation = Propagation.REQUIRED)
+//    public void payWithOnlyWX(OrderEntity orderEntity, WXUnifiedOrderInfo wxOrderInfo) {
+//        PayTradeEntity tradeEntity = PayTradeEntity.create(orderEntity, wxOrderInfo);
+//        PayTradeEntity oldTradeEntity = payTradeMapper.selectEntityByOidLocked(orderEntity.getOid());
+//        if (oldTradeEntity == null) {
+//            payTradeMapper.insertOrderEntity(tradeEntity);
+//        } else {
+//            int upResult = payTradeMapper.updateOrderEntity(tradeEntity);
+//            if (upResult != 1) {
+//                logger.error("retry to pay the old order:[{}], fail to update prepay_id", orderEntity.getOid());
+//                throw new ZXException(ResultStatusCode.ORDER_ID_NOT_EXISTS);
+//            }
+//        }
+//    }
+//
+//    private long calcBalancePayFee(OrderEntity orderEntity, UserAuthEntity authEntity, PayOrderReqVo reqVo) {
+//        long balancePayFee;
+//        long orderTotalFee = orderEntity.getTotal();
+//        if (reqVo.isUseBalance()) {
+//            // 至少保证微信支付一分钱
+//            if (authEntity.getBalance() < orderTotalFee) {
+//                balancePayFee = authEntity.getBalance();
+//            } else {
+//                balancePayFee = orderTotalFee - 1;
+//            }
+//        } else {
+//            balancePayFee = 0;
+//        }
+//        return balancePayFee;
+//    }
 
     /**
      * 支付结果回调

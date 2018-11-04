@@ -2,17 +2,20 @@ package com.zhenxuan.tradeapi.dao.entity;
 
 import com.zhenxuan.tradeapi.domain.WXPayResultInfo;
 import com.zhenxuan.tradeapi.domain.WXUnifiedOrderInfo;
+import com.zhenxuan.tradeapi.utils.GlobalIdUtil;
 
 /**
  * 支付通道交易记录
  */
 public class PayTradeEntity {
 
+    private String payTradeId;
+
     private String orderId;
 
     private String authUid;
 
-    private long amount;
+    private long amount;  // 只是该订单的微信支付金额
 
     private String prepayId;
 
@@ -44,6 +47,7 @@ public class PayTradeEntity {
 
     public static PayTradeEntity create(OrderEntity orderEntity, WXUnifiedOrderInfo wxOrderInfo) {
         PayTradeEntity entity = new PayTradeEntity();
+        entity.setPayTradeId(GlobalIdUtil.newOrderId());
         entity.setOrderId(orderEntity.getOid());
         entity.setAuthUid(orderEntity.getAuthUid());
         entity.setAmount(orderEntity.getTotal());
@@ -70,6 +74,14 @@ public class PayTradeEntity {
         entity.setPaidAt(resultInfo.getPaidAt());
 
         return entity;
+    }
+
+    public String getPayTradeId() {
+        return payTradeId;
+    }
+
+    public void setPayTradeId(String payTradeId) {
+        this.payTradeId = payTradeId;
     }
 
     public String getOrderId() {

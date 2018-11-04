@@ -170,9 +170,10 @@ CREATE TABLE `tbl_product` (
 
 DROP TABLE IF EXISTS `tbl_pay_trade`;
 CREATE TABLE `tbl_pay_trade` (
+  `pay_trade_id` varchar(255) NOT NULL,
   `oid` varchar(255) NOT NULL,
   `auth_uid` varchar(64) NOT NULL,
-  `amount` bigint(20) NOT NULL COMMENT '统一下单原始总金额',
+  `amount` bigint(20) NOT NULL COMMENT '统一下单原始总金额,微信消耗',
   `prepay_id` varchar(255) NOT NULL COMMENT '微信发通知用',
   `ip` varchar(255) NOT NULL,
   `result_code` varchar(255) NOT NULL DEFAULT 'INIT' COMMENT '微信支付业务结果',
@@ -189,7 +190,8 @@ CREATE TABLE `tbl_pay_trade` (
   `paid_at` varchar(64) NOT NULL DEFAULT '' COMMENT '微信交易完成时间',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`oid`)
+  PRIMARY KEY (`pay_trade_id`),
+  UNIQUE KEY `uk_oid` (`oid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='微信支付交易表';
 
 DROP TABLE IF EXISTS `tbl_reverse_order`;
@@ -219,6 +221,7 @@ CREATE TABLE `tbl_reverse_order` (
 DROP TABLE IF EXISTS `tbl_user_balance_bill`;
 CREATE TABLE `tbl_user_balance_bill` (
   `bill_id` varchar(255) NOT NULL,
+  `oid` varchar(255) NOT NULL,
   `auth_uid` varchar(64) NOT NULL,
   `amount` bigint(20) NOT NULL,
   `income` tinyint(4) NOT NULL COMMENT '1加 0减',
@@ -230,7 +233,6 @@ CREATE TABLE `tbl_user_balance_bill` (
   `cancel_status` tinyint(4) NOT NULL,
   `completed_at` datetime NOT NULL,
   `type` tinyint(4) NOT NULL COMMENT '哪种账单',
-  `oid` varchar(255) NOT NULL,
   `describe` varchar(255) NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',

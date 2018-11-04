@@ -4,12 +4,13 @@ import com.zhenxuan.tradeapi.common.ZXException;
 import com.zhenxuan.tradeapi.common.enums.ResultStatusCode;
 import com.zhenxuan.tradeapi.common.enums.SignConfig;
 import com.zhenxuan.tradeapi.common.http.HttpJSONHelper;
+import com.zhenxuan.tradeapi.common.vo.weixin.WXPayUnifiedOrderReqVo;
+import com.zhenxuan.tradeapi.common.vo.weixin.WXPayUnifiedOrderRespVo;
 import com.zhenxuan.tradeapi.dao.entity.OrderEntity;
 import com.zhenxuan.tradeapi.domain.WXUnifiedOrderInfo;
 import com.zhenxuan.tradeapi.utils.CommonUtil;
+import com.zhenxuan.tradeapi.utils.DateUtil;
 import com.zhenxuan.tradeapi.utils.JsonUtil;
-import com.zhenxuan.tradeapi.common.vo.weixin.WXPayUnifiedOrderReqVo;
-import com.zhenxuan.tradeapi.common.vo.weixin.WXPayUnifiedOrderRespVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,11 @@ import java.util.Map;
 public class WXPayUnifiedOrder extends WXPayBaseRpc {
 
     private static final Logger logger = LoggerFactory.getLogger(WXPayUnifiedOrder.class);
+
+    private final String WX_ORDER_EXPIRE_FORMAT = "yyyyMMddHHmmss";
+
+    @Value("${wx.pay.prepayid.expire.ms}")
+    private long wxPrepayIdExpireMS;
 
     @Value("${wx.pay.unifiedorder}")
     private String unifiedOrderUrl;
@@ -48,6 +54,11 @@ public class WXPayUnifiedOrder extends WXPayBaseRpc {
         payReqVo.setOrderId(orderEntity.getOid());
         payReqVo.setTotalFee(String.valueOf(wxPayRealFee));
         payReqVo.setSpbillCreateIp(CommonUtil.getLocalIpAddr());
+
+        long curTime = System.currentTimeMillis();
+        payReqVo.setOrderStartTime(DateUtil.format(curTime, WX_ORDER_EXPIRE_FORMAT));
+        payReqVo.setOrderExpireTime(DateUtil.format(curTime + wxPrepayIdExpireMS, WX_ORDER_EXPIRE_FORMAT));
+
         payReqVo.setNotifyUrl(unifiedOrderNotifyUrl);
         payReqVo.setTradeType("JSAPI");
         payReqVo.setSignType(SignConfig.WX_PAY_SIGN.signMethod.des);

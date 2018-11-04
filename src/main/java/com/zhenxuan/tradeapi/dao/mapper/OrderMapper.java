@@ -4,10 +4,12 @@ import com.zhenxuan.tradeapi.dao.entity.OrderEntity;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public interface OrderMapper {
 
-    OrderEntity selectEntityByUid(@Param("authUid") String authUid);
+    List<OrderEntity> selectEntityByUid(@Param("authUid") String authUid);
 
     int insertOrder(OrderEntity orderEntity);
 
