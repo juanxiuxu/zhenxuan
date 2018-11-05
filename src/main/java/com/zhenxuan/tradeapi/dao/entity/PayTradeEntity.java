@@ -43,7 +43,7 @@ public class PayTradeEntity {
 
     private String bankType;
 
-    private String paidAt;
+    private long paidAt; // unix timestamp, second
 
     public static PayTradeEntity create(OrderEntity orderEntity, WXUnifiedOrderInfo wxOrderInfo) {
         PayTradeEntity entity = new PayTradeEntity();
@@ -212,11 +212,10 @@ public class PayTradeEntity {
         this.bankType = bankType;
     }
 
-    public String getPaidAt() {
-        return paidAt;
-    }
-
-    public void setPaidAt(String paidAt) {
+    public void setPaidAt(long paidAt) {
         this.paidAt = paidAt;
+    }
+    public long getPaidAt() {
+        return paidAt;
     }
 }

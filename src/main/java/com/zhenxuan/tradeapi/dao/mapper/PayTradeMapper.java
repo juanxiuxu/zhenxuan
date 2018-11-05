@@ -11,5 +11,7 @@ public interface PayTradeMapper {
 
     PayTradeEntity selectEntityByOid(@Param("orderId") String orderId);
 
+    // List<PayTradeEntity> selectEntitiesByCond(PayTradeEntity payTradeEntity);
+
     int updatePayNotifyResult(PayTradeEntity payTradeEntity);
 }

@@ -45,6 +45,8 @@ public class OrderEntity extends Entity {
 
     private int discount;
 
+    private long paidAt; // 支付状态变化时间
+
     public String getOid() {
         return oid;
     }
@@ -203,5 +205,13 @@ public class OrderEntity extends Entity {
 
     public void setDiscount(int discount) {
         this.discount = discount;
+    }
+
+    public long getPaidAt() {
+        return paidAt;
+    }
+
+    public void setPaidAt(long paidAt) {
+        this.paidAt = paidAt;
     }
 }

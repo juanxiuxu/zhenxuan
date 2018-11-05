@@ -22,4 +22,6 @@ public interface UserAuthMapper {
                           @Param("member") Integer member, @Param("expired") Integer expired);
 
     int decreaseUserBalance(@Param("authUid") String authUid, @Param("amount") Long amount);
+
+    int increaseUserBalance(@Param("authUid") String authUid, @Param("amount") Long amount);
 }

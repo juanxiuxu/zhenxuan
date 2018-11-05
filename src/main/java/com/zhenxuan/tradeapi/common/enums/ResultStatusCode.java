@@ -57,6 +57,9 @@ public enum ResultStatusCode {
     UNKNOWN_WXPAY_NOTIFY(7005, "unknown wxPay notify"),
     CANNOT_PAY_WITH_BALANCE(7006, "can not pay with balance");
 
+    // 定时任务 9000开头
+    //NO_ORDER_UPDATE_STATUS(9001, "no order update");
+
     public final int code;
     public final String desc;
 

@@ -23,10 +23,11 @@
         <result column="payment" property="payment" />
         <result column="user_balance_consume" property="userBalanceConsume" />
         <result column="discount" property="discount" />
+        <result column="paid_at" property="paidAt" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        oid, auth_uid, tid, iuid, vip, order_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount
+        oid, auth_uid, tid, iuid, vip, order_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount, paid_at
     </sql>
 
     <sql id="insert_columns">
@@ -49,6 +50,7 @@
         <if test="payment != null">,payment</if>
         <if test="userBalanceConsume != null">,user_balance_consume</if>
         <if test="discount != null">,discount</if>
+        <if test="paid_at != 0">,paidAt</if>
     </sql>
 
 
@@ -98,10 +100,12 @@
     <update id="updateOrderState">
         update tbl_order
         <set>
-            <if test="orderStatus != null">order_status = #{orderStatus,jdbcType=INTEGER},</if>
+            <if test="newOrderStatus != 0">order_status = #{newOrderStatus,jdbcType=INTEGER}</if>
+            <if test="paidAt != 0">, paid_at = #{paidAt,jdbcType=BIGINT}</if>
         </set>
         <where>
             oid = #{oid,jdbcType=VARCHAR}
+            <if test="oldOrderStatus != 0"> AND order_status = #{oldOrderStatus,jdbcType=INTEGER}</if>
         </where>
     </update>
 
@@ -111,6 +115,18 @@
         from tbl_order
         <where>
             oid = #{oid,jdbcType=VARCHAR}
+        </where>
+    </select>
+
+    <select id="selectEntitiesByPaidAtRangeAndStatus" resultMap="BaseResultMap"
+            parameterType="map">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_order
+        <where>
+            order_status = #{orderStatus,jdbcType=INTEGER}
+            AND
+            paid_at between #{startPaidAt,jdbcType=BIGINT} AND #{endPaidAt,jdbcType=BIGINT}
         </where>
     </select>
 

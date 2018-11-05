@@ -13,7 +13,7 @@ public class UserBalanceBillEntity extends Entity {
 
     private long amount;
 
-    private int income;
+    private int income;  // 1:加 0:减
 
     private long initBalance;
 

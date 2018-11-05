@@ -2,12 +2,15 @@ package com.zhenxuan.tradeapi.domain;
 
 import com.zhenxuan.tradeapi.common.vo.weixin.WXPayBaseVo;
 import com.zhenxuan.tradeapi.common.vo.weixin.WXPayDirectNotifyReqVo;
+import com.zhenxuan.tradeapi.utils.DateUtil;
 import com.zhenxuan.tradeapi.utils.JsonUtil;
 
 /**
  * 支付下单的结果模型
  */
 public class WXPayResultInfo {
+
+    public static final String WXPayTimeFormat = "yyyyMMddHHmmss";
 
     private String resultCode;
 
@@ -35,7 +38,7 @@ public class WXPayResultInfo {
 
     private String productDesc;
 
-    private String paidAt;
+    private long paidAt; // unix timestamp, second
 
     public static WXPayResultInfo create(WXPayDirectNotifyReqVo notifyReqVo) {
         WXPayResultInfo info = new WXPayResultInfo();
@@ -55,7 +58,7 @@ public class WXPayResultInfo {
             info.setProductDesc(notifyReqVo.getAttach());
             info.setTradeType(notifyReqVo.getTradeType());
             info.setBankType(notifyReqVo.getBankType());
-            info.setPaidAt(notifyReqVo.getTimeEnd());
+            info.setPaidAt(DateUtil.toUnixTimestamp(notifyReqVo.getTimeEnd(), WXPayTimeFormat));
         }
 
         return info;
@@ -157,11 +160,11 @@ public class WXPayResultInfo {
         this.productDesc = productDesc;
     }
 
-    public String getPaidAt() {
+    public long getPaidAt() {
         return paidAt;
     }
 
-    public void setPaidAt(String paidAt) {
+    public void setPaidAt(long paidAt) {
         this.paidAt = paidAt;
     }
 
@@ -176,5 +179,12 @@ public class WXPayResultInfo {
     @Override
     public String toString() {
         return JsonUtil.toString(this);
+    }
+
+    public static void main(String[] args) {
+        String paidAt = "20140903131540";
+        long paidTs = DateUtil.toUnixTimestamp(paidAt, WXPayTimeFormat);
+        System.out.println(System.currentTimeMillis());
+        System.out.println(paidTs);
     }
 }

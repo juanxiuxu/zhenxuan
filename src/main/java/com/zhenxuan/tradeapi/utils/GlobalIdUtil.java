@@ -118,5 +118,8 @@ public class GlobalIdUtil {
 
     public static void main(String[] args) {
         System.out.printf("%s %s", GlobalIdUtil.newRequestId(), GlobalIdUtil.newLoginUid());
+        for (int i = 0; i < 10; i++) {
+            System.out.println(GlobalIdUtil.newOrderId());
+        }
     }
 }

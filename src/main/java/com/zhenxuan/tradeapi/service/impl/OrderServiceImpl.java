@@ -113,6 +113,7 @@ public class OrderServiceImpl implements OrderService {
         orderEntity.setCashback(cashBack);
         orderEntity.setOp(spuInfo.getOp());
         orderEntity.setOrderStatus(OrderStatus.PAY_WAITING.code);
+        orderEntity.setPaidAt(System.currentTimeMillis() / 1000);
         orderEntity.setOid(GlobalIdUtil.newOrderId());
 
         return orderEntity;

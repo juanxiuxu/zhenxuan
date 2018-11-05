@@ -1,6 +1,8 @@
 package com.zhenxuan.tradeapi.service.impl;
 
+import com.google.common.base.Throwables;
 import com.zhenxuan.tradeapi.common.ZXException;
+import com.zhenxuan.tradeapi.common.enums.OrderStatus;
 import com.zhenxuan.tradeapi.common.enums.ResultStatusCode;
 import com.zhenxuan.tradeapi.common.vo.PayOrderReqVo;
 import com.zhenxuan.tradeapi.common.vo.PayOrderRespVo;
@@ -23,6 +25,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 支付服务实现类
@@ -171,10 +175,41 @@ public class PaymentServiceImpl implements PaymentService {
             return respVo;
         }
 
+        OrderEntity orderEntity = orderMapper.selectEntityByOid(orderId);
+        if (orderEntity == null) {
+            logger.error("order not exists. orderId:[{}]", orderId);
+            respVo.setReturnCode(WXPayBaseVo.WXPayRespCode.FAIL.code);
+            return respVo;
+        }
+        if (orderEntity.getOrderStatus() != OrderStatus.PAY_WAITING.code) {
+            logger.error("order status is not pay_waiting. do not update used by wxpay notify. orderId:[{}]", orderId);
+            respVo.setReturnCode(WXPayBaseVo.WXPayRespCode.FAIL.code);
+            return respVo;
+        }
+
         PayTradeEntity newTradeEntity = PayTradeEntity.create(wxResult);
-        payTradeMapper.updatePayNotifyResult(newTradeEntity);
+        try {
+            payOrderNotifyInternal(newTradeEntity);
+        } catch (Exception e) {
+            logger.error("update orderStatus and payNotifyResult is failed. err:{}", Throwables.getStackTraceAsString(e));
+            respVo.setReturnCode(WXPayBaseVo.WXPayRespCode.FAIL.code);
+            return respVo;
+        }
 
         respVo.setReturnCode(WXPayBaseVo.WXPayRespCode.SUCCESS.code);
         return respVo;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void payOrderNotifyInternal(PayTradeEntity newTradeEntity) {
+        payTradeMapper.updatePayNotifyResult(newTradeEntity);
+
+        int oldOrderStatus = OrderStatus.PAY_WAITING.code;
+        int newOrderStatus = OrderStatus.PAY_SUCCESS.code;
+        int upResult = orderMapper.updateOrderState(newTradeEntity.getOrderId(), oldOrderStatus, newOrderStatus, newTradeEntity.getPaidAt());
+        if (upResult == 0) {
+            logger.error("order status is not pay_waiting. do not update used by wxpay notify. orderId:[{}]", newTradeEntity.getOrderId());
+            throw new RuntimeException("order status is not pay_waiting");
+        }
     }
 }

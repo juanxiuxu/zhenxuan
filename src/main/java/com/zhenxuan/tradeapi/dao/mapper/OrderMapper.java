@@ -13,9 +13,17 @@ public interface OrderMapper {
 
     int insertOrder(OrderEntity orderEntity);
 
-    int updateOrderState(@Param("oid") String oid, @Param("orderStatus") Integer orderStatus);
+    int updateOrderState(@Param("oid") String oid,
+                         @Param("oldOrderStatus") Integer oldOrderStatus,
+                         @Param("newOrderStatus") Integer newOrderStatus,
+                        @Param("paidAt") Long paidAt);
 
     OrderEntity selectEntityByOid(@Param("oid") String orderId);
 
-    List<OrderEntity> selectEntityByUidAndCTime();
+    // List<OrderEntity> selectEntityByUidAndCTime();
+
+    List<OrderEntity> selectEntitiesByPaidAtRangeAndStatus(@Param("orderStatus") Integer orderStatus,
+                                                            @Param("startPaidAt") Long startPaidAt,
+                                                            @Param("endPaidAt") Long endPaidAt);
+
 }

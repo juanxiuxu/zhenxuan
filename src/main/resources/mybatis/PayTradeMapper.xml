@@ -132,7 +132,7 @@
             product_desc = #{productDesc,jdbcType=VARCHAR},
             trade_type = #{tradeType,jdbcType=VARCHAR},
             bank_type = #{bankType,jdbcType=VARCHAR},
-            paid_at = #{paidAt,jdbcType=VARCHAR}
+            paid_at = #{paidAt,jdbcType=BIGINT}
         </set>
         <where>
             oid = #{orderId,jdbcType=VARCHAR}
@@ -148,4 +148,5 @@
             oid = #{orderId,jdbcType=VARCHAR}
         </where>
     </select>
+
 </mapper>
