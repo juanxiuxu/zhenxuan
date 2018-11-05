@@ -13,7 +13,9 @@ public interface OrderMapper {
 
     int insertOrder(OrderEntity orderEntity);
 
-    int updateOrderState(@Param("oid") String oid, @Param("orderStatus") int orderStatus);
+    int updateOrderState(@Param("oid") String oid, @Param("orderStatus") Integer orderStatus);
 
     OrderEntity selectEntityByOid(@Param("oid") String orderId);
+
+    List<OrderEntity> selectEntityByUidAndCTime();
 }

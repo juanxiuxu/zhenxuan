@@ -7,9 +7,9 @@ public interface ProductMapper {
 
     ProductEntity selectEntity(@Param("skuId") String skuId);
 
-    int decreaseStockCount(@Param("skuId") String skuId, @Param("count") int count);
+    int decreaseStockCount(@Param("skuId") String skuId, @Param("count") Integer count);
 
-    int increaseStockCount(@Param("skuId") String skuId, @Param("count") int count);
+    int increaseStockCount(@Param("skuId") String skuId, @Param("count") Integer count);
 
-    int increaseSalesCount(@Param("skuId") String skuId, @Param("count") int count);
+    int increaseSalesCount(@Param("skuId") String skuId, @Param("count") Integer count);
 }
