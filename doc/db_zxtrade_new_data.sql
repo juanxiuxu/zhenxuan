@@ -88,6 +88,7 @@ CREATE TABLE `tbl_order` (
   `iuid` varchar(255) NOT NULL DEFAULT '0',
   `vip` tinyint(4) NOT NULL DEFAULT '0',
   `order_status` int(11) NOT NULL,
+  `balance_status` int(11) NOT NULL DEFAULT -1 COMMENT '订单打款状态',
   `code` varchar(255) NOT NULL DEFAULT 'INIT',
   `op` varchar(255) NOT NULL,
   `recheck` varchar(255) NOT NULL DEFAULT 'ACCESS',
@@ -104,6 +105,7 @@ CREATE TABLE `tbl_order` (
   `discount` int(11) NOT NULL,
   `actual_payment` int(11) NOT NULL COMMENT '暂无用',
   `paid_at` bigint(20) unsigned NOT NULL DEFAULT 0 COMMENT '订单支付状态变更时间',
+  `_deleted` tinyint(4) NOT NULL DEFAULT 0,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`oid`)
@@ -226,12 +228,12 @@ CREATE TABLE `tbl_user_balance_bill` (
   `auth_uid` varchar(64) NOT NULL,
   `amount` bigint(20) NOT NULL,
   `income` tinyint(4) NOT NULL COMMENT '1加 0减',
-  `init_balance` bigint(20) NOT NULL DEFAULT 0,
-  `final_balance` bigint(20) NOT NULL DEFAULT 0,
+  `init_balance` bigint(20) NOT NULL DEFAULT 0 COMMENT '暂无用',
+  `final_balance` bigint(20) NOT NULL DEFAULT 0 COMMENT '暂无用',
   `currency` varchar(255) NOT NULL DEFAULT 'CNY',
-  `complete_status` tinyint(4) NOT NULL,
-  `balance_status` tinyint(4) NOT NULL,
-  `cancel_status` tinyint(4) NOT NULL,
+  `complete_status` tinyint(4) NOT NULL COMMENT '暂无用',
+  `balance_status` tinyint(4) NOT NULL COMMENT '暂无用',
+  `cancel_status` tinyint(4) NOT NULL COMMENT '暂无用',
   `completed_at` datetime NOT NULL,
   `type` tinyint(4) NOT NULL COMMENT '哪种账单',
   `describe` varchar(255) NOT NULL,
@@ -308,9 +310,9 @@ CREATE TABLE `tbl_z_temp_user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `tbl_order` WRITE;
-INSERT INTO `tbl_order` (oid, auth_uid, tid, iuid, vip, order_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount, actual_payment) VALUES ('myoid1','jIWQp/Z/AABb1HdmAAAAAgE=','0','0',0,1,'INIT','myop1','ACCESS',1,1,0,0,'couponcode1',0,0,0,1,0,0,0);
-INSERT INTO `tbl_order` (oid, auth_uid, tid, iuid, vip, order_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount, actual_payment) VALUES ('myoid2','jIWQp/Z/AABb1HdmAAAAAgE=','0','0',0,1,'INIT','myop1','ACCESS',1,1,0,0,'couponcode1',0,0,0,1,0,0,0);
-INSERT INTO `tbl_order` (oid, auth_uid, tid, iuid, vip, order_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount, actual_payment) VALUES ('myoid3','jIWQp/Z/AABb1HdmAAAAAgE=','0','0',0,1,'INIT','myop1','ACCESS',1,1,0,0,'couponcode1',0,0,0,1,0,0,0);
+INSERT INTO `tbl_order` (oid, auth_uid, tid, iuid, vip, order_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount, actual_payment) VALUES ('myoid1','jIWQp/Z/AABb1HdmAAAAAgE=','0','0',0,2,'INIT','myop1','ACCESS',1,1,0,0,'couponcode1',0,0,0,1,0,0,0);
+INSERT INTO `tbl_order` (oid, auth_uid, tid, iuid, vip, order_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount, actual_payment) VALUES ('myoid2','jIWQp/Z/AABb1HdmAAAAAgE=','0','0',0,2,'INIT','myop1','ACCESS',1,1,0,0,'couponcode1',0,0,0,1,0,0,0);
+INSERT INTO `tbl_order` (oid, auth_uid, tid, iuid, vip, order_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount, actual_payment) VALUES ('myoid3','jIWQp/Z/AABb1HdmAAAAAgE=','0','0',0,2,'INIT','myop1','ACCESS',1,1,0,0,'couponcode1',0,0,0,1,0,0,0);
 UNLOCK TABLES;
 
 LOCK TABLES `tbl_user_login` WRITE;

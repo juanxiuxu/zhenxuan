@@ -17,6 +17,8 @@ public class OrderEntity extends Entity {
 
     private int orderStatus;
 
+    private int balanceStatus;  // 1：已打款
+
     private String code;
 
     private String op;
@@ -46,6 +48,8 @@ public class OrderEntity extends Entity {
     private int discount;
 
     private long paidAt; // 支付状态变化时间
+
+    private int deleted; // 是否删除
 
     public String getOid() {
         return oid;
@@ -213,5 +217,21 @@ public class OrderEntity extends Entity {
 
     public void setPaidAt(long paidAt) {
         this.paidAt = paidAt;
+    }
+
+    public int getBalanceStatus() {
+        return balanceStatus;
+    }
+
+    public void setBalanceStatus(int balanceStatus) {
+        this.balanceStatus = balanceStatus;
+    }
+
+    public int getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(int deleted) {
+        this.deleted = deleted;
     }
 }

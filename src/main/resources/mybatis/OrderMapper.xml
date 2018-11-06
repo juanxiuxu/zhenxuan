@@ -9,6 +9,7 @@
         <result column="iuid" property="iuid" />
         <result column="vip" property="vip" />
         <result column="order_status" property="orderStatus" />
+        <result column="balance_status" property="balanceStatus" />
         <result column="code" property="code" />
         <result column="op" property="op" />
         <result column="recheck" property="recheck" />
@@ -24,10 +25,11 @@
         <result column="user_balance_consume" property="userBalanceConsume" />
         <result column="discount" property="discount" />
         <result column="paid_at" property="paidAt" />
+        <result column="_deleted" property="deleted" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        oid, auth_uid, tid, iuid, vip, order_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount, paid_at
+        oid, auth_uid, tid, iuid, vip, order_status, balance_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount, paid_at, _deleted
     </sql>
 
     <sql id="insert_columns">
@@ -36,7 +38,8 @@
         <if test="tid != null">,tid</if>
         <if test="iuid != null">,iuid</if>
         <if test="vip != null">,vip</if>
-        <if test="orderStatus != null">,order_status</if>
+        <if test="orderStatus != 0">,order_status</if>
+        <if test="balanceStatus != 0">,balance_status</if>
         <if test="code != null">,code</if>
         <if test="op != null">,op</if>
         <if test="recheck != null">,recheck</if>
@@ -51,6 +54,7 @@
         <if test="userBalanceConsume != null">,user_balance_consume</if>
         <if test="discount != null">,discount</if>
         <if test="paid_at != 0">,paidAt</if>
+        <if test="_deleted != 0">,deleted</if>
     </sql>
 
 
@@ -60,7 +64,8 @@
         <if test="tid != null">tid</if>
         <if test="iuid != null">iuid</if>
         <if test="vip != null">vip</if>
-        <if test="orderStatus != null">orderStatus</if>
+        <if test="orderStatus != 0">orderStatus</if>
+        <if test="balanceStatus != 0">balanceStatus</if>
         <if test="code != null">code</if>
         <if test="op != null">op</if>
         <if test="recheck != null">recheck</if>
@@ -74,6 +79,8 @@
         <if test="payment != null">payment</if>
         <if test="userBalanceConsume != null">userBalanceConsume</if>
         <if test="discount != null">discount</if>
+        <if test="paid_at != 0">,paidAt</if>
+        <if test="_deleted != 0">,deleted</if>
     </sql>
 
 
@@ -83,6 +90,7 @@
         from tbl_order
         <where>
             auth_uid = #{authUid,jdbcType=VARCHAR}
+            AND _deleted = 0
         </where>
     </select>
 
@@ -109,6 +117,17 @@
         </where>
     </update>
 
+    <update id="updateBalanceStatus">
+        update tbl_order
+        <set>
+            <if test="balanceStatus != 0">balance_status = #{newBalanceStatus,jdbcType=INTEGER}</if>
+        </set>
+        <where>
+            oid = #{oid,jdbcType=VARCHAR}
+            <if test="oldBalanceStatus != 0"> AND balance_status = #{oldBalanceStatus,jdbcType=INTEGER}</if>
+        </where>
+    </update>
+
     <select id="selectEntityByOid" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
@@ -126,7 +145,10 @@
         <where>
             order_status = #{orderStatus,jdbcType=INTEGER}
             AND
+            balance_status = #{balanceStatus,jdbcType=INTEGER}
+            AND
             paid_at between #{startPaidAt,jdbcType=BIGINT} AND #{endPaidAt,jdbcType=BIGINT}
+            AND _deleted = 0
         </where>
     </select>
 

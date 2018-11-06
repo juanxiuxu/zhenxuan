@@ -18,11 +18,16 @@ public interface OrderMapper {
                          @Param("newOrderStatus") Integer newOrderStatus,
                         @Param("paidAt") Long paidAt);
 
+    int updateBalanceStatus(@Param("oid") String oid,
+                            @Param("oldBalanceStatus") Integer oldBalanceStatus,
+                            @Param("newBalanceStatus") Integer newBalanceStatus);
+
     OrderEntity selectEntityByOid(@Param("oid") String orderId);
 
     // List<OrderEntity> selectEntityByUidAndCTime();
 
     List<OrderEntity> selectEntitiesByPaidAtRangeAndStatus(@Param("orderStatus") Integer orderStatus,
+                                                            @Param("balanceStatus") Integer balanceStatus,
                                                             @Param("startPaidAt") Long startPaidAt,
                                                             @Param("endPaidAt") Long endPaidAt);
 

@@ -10,9 +10,7 @@ public enum OrderStatus {
     PAY_SUCCESS(2, "pay success"), // 支付成功
     PAY_FAILED(3, "pay failed"), // 支付失败
     REFUND_SUCCESS(4, "refund success"), // 退款成功
-    PAY_CLOSED(5, "pay closed"),  // 支付交易关闭
-
-    PUSH_CASHBACK_FINISH(10, "push cashback finish"); // 打款完成
+    PAY_CLOSED(5, "pay closed");  // 支付交易关闭
 
     OrderStatus(int code, String desc) {
         this.code = code;
