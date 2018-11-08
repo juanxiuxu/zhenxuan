@@ -79,15 +79,14 @@ public class PushCashbackJob extends BaseJob {
 
     @Override
     public void preExecute(String[] args) {
-        logger.info("PushCashbackJob begin");
         super.preExecute(args);
-
+        logger.info("PushCashbackJob begin");
     }
 
     @Override
     public void afterExecute() {
-        logger.info("PushCashbackJob end");
         super.afterExecute();
+        logger.info("PushCashbackJob end");
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
