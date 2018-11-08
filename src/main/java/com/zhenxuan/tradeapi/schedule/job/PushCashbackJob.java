@@ -48,13 +48,12 @@ public class PushCashbackJob extends BaseJob {
     public void doExecute(String[] args) {
         int orderStatus = OrderStatus.PAY_SUCCESS.code;
         int balanceStatus = BalanceStatus.UNKNOWN.code;
-//        long curTime = System.currentTimeMillis() / 1000;
-//        long endPaidAt = curTime - rangeDay * 24 * 3600;
-//        long startPaidAt = endPaidAt - 24 * 3600;
-        long endPaidAt = 1553426184;
-        long startPaidAt = 1541436184;
-        List<OrderEntity> orderEntities = orderMapper.selectEntitiesByPaidAtRangeAndStatus(
-                orderStatus, balanceStatus, startPaidAt, endPaidAt);
+
+        long curTime = System.currentTimeMillis() / 1000;
+        long endPaidAt = curTime - rangeDay * 24 * 3600;
+        long startPaidAt = endPaidAt - 24 * 3600;
+        List<OrderEntity> orderEntities = orderMapper.selectEntitiesByPaidAtRangeAndStatus(orderStatus,
+                balanceStatus, startPaidAt, endPaidAt);
 
         if (orderEntities != null) {
             for (OrderEntity orderEntity : orderEntities) {
