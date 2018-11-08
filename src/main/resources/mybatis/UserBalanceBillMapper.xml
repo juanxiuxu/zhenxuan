@@ -3,89 +3,68 @@
 <mapper namespace="com.zhenxuan.tradeapi.dao.mapper.UserBalanceBillMapper">
 
     <resultMap id="BaseResultMap" type="com.zhenxuan.tradeapi.dao.entity.UserBalanceBillEntity">
-        <id column="bill_id" />
-        <result column="auth_uid" />
-        <result column="amount" />
-        <result column="income" />
-        <result column="init_balance"/>
-        <result column="final_balance" />
-        <result column="transaction_id" />
-        <result column="currency" />
-        <result column="complete_status" />
-        <result column="balance_status" />
-        <result column="cancel_status" />
-        <result column="completed_at" />
-        <result column="type" />
-        <result column="oid" />
-        <result column="describe" />
+        <id column="bill_id" property="billId"/>
+        <result column="oid" property="oid" />
+        <result column="auth_uid" property="authUid"/>
+        <result column="amount" property="amount"/>
+        <result column="income" property="income"/>
+        <result column="init_balance" property="initBalance"/>
+        <result column="final_balance" property="finalBalance"/>
+        <result column="currency" property="currency"/>
+        <result column="complete_status" property="completeStatus"/>
+        <result column="balance_status" property="balanceStatus"/>
+        <result column="cancel_status" property="cancelStatus" />
+        <result column="completed_at" property="completeAt" />
+        <result column="bill_type" property="billType" />
+        <result column="bill_desc" property="billDsesc"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        bill_id, auth_uid, amount, incode
+        bill_id, oid, auth_uid, amount, incode, init_balance, final_balance, currency, complete_status, balance_status, cancel_status, completed_at, `type`, `describe`
     </sql>
 
-    <!-- sql id="insert_columns">
-        <if test="oid != null">oid</if>
+    <sql id="insert_columns">
+        <if test="billId != null">bill_id</if>
+        <if test="oid != null">,oid</if>
         <if test="authUid != null">,auth_uid</if>
-        <if test="tid != null">,tid</if>
-        <if test="iuid != null">,iuid</if>
-        <if test="vip != null">,vip</if>
-        <if test="orderStatus != null">,order_status</if>
-        <if test="code != null">,code</if>
-        <if test="op != null">,op</if>
-        <if test="recheck != null">,recheck</if>
-        <if test="total != null">,total</if>
-        <if test="goodsTotal != null">,goods_total</if>
-        <if test="cashback != null">,cashback</if>
-        <if test="bonus != null">,bonus</if>
-        <if test="couponCode != null">,coupon_code</if>
-        <if test="freight != null">,freight</if>
-        <if test="freightDiscount != null">,freight_discount</if>
-        <if test="payment != null">,payment</if>
-        <if test="userBalanceConsume != null">,user_balance_consume</if>
-        <if test="discount != null">,discount</if>
-        <if test="actualPayment != null">,actual_payment</if>
-        <if test="paidAt != null">,paid_at</if>
-        <if test="payOrd != null">,pay_oid</if>
-        create_time,
-        update_time
+        <if test="amount != 0">,amount</if>
+        <if test="income != 0">,income</if>
+        <if test="initBalance != 0">,init_balance</if>
+        <if test="finalBalance != 0">,final_balance</if>
+        <if test="currency != null">,currency</if>
+        <if test="completeStatus != 0">,complete_status</if>
+        <if test="balanceStatus != 0">,balance_status</if>
+        <if test="cancelStatus != 0">,cancel_status</if>
+        <if test="completedAt != null">,completed_at</if>
+        <if test="billType != 0">,bill_type</if>
+        <if test="billDesc != null">,bill_desc</if>
     </sql>
 
 
     <sql id="insert_values">
-        <if test="oid != null">oid</if>
-        <if test="authUid != null">authUid</if>
-        <if test="tid != null">tid</if>
-        <if test="iuid != null">iuid</if>
-        <if test="vip != null">vip</if>
-        <if test="orderStatus != null">orderStatus</if>
-        <if test="code != null">code</if>
-        <if test="op != null">op</if>
-        <if test="recheck != null">recheck</if>
-        <if test="total != null">total</if>
-        <if test="goodsTotal != null">goodsTotal</if>
-        <if test="cashback != null">cashback</if>
-        <if test="bonus != null">bonus</if>
-        <if test="couponCode != null">couponCode</if>
-        <if test="freight != null">freight</if>
-        <if test="freightDiscount != null">freightDiscount</if>
-        <if test="payment != null">payment</if>
-        <if test="userBalanceConsume != null">userBalanceConsume</if>
-        <if test="discount != null">discount</if>
-        <if test="actualPayment != null">actualPayment</if>
-        <if test="paidAt != null">paidAt</if>
-        <if test="payOrd != null">payOrd</if>
-        now(),
-        now()
-    </sql -->
+        <if test="billId != null">#{billId}</if>
+        <if test="oid != null">,#{oid}</if>
+        <if test="authUid != null">,#{authUid}</if>
+        <if test="amount != 0">,#{amount}</if>
+        <if test="income != 0">,#{income}</if>
+        <if test="initBalance != 0">,#{initBalance}</if>
+        <if test="finalBalance != 0">,#{finalBalance}</if>
+        <if test="currency != null">,#{currency}</if>
+        <if test="completeStatus != 0">,#{completeStatus}</if>
+        <if test="balanceStatus != 0">,#{balanceStatus}</if>
+        <if test="cancelStatus != 0">,#{cancelStatus}</if>
+        <if test="completedAt != null">,#{completedAt}</if>
+        <if test="billType != 0">,#{billType}</if>
+        <if test="billDesc != null">,#{billDesc}</if>
+    </sql>
 
     <insert id="insertEntity"
             parameterType="com.zhenxuan.tradeapi.dao.entity.UserBalanceBillEntity">
         insert into
         tbl_user_balance_bill (
-        <include refid="Base_Column_List" />
+        <include refid="insert_columns" />
         ) values (
-            oid, authUid, amount, prepayId, ip
+        <include refid="insert_values"/>
         )
     </insert>
 </mapper>

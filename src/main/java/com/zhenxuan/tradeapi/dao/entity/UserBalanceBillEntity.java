@@ -9,6 +9,8 @@ public class UserBalanceBillEntity extends Entity {
 
     private String billId;
 
+    private String oid;
+
     private String authUid;
 
     private long amount;
@@ -27,23 +29,21 @@ public class UserBalanceBillEntity extends Entity {
 
     private int cancelStatus;
 
-    private Date completeAt;
+    private Date completedAt;
 
-    private int type;
+    private int billType;
 
-    private String orderId;
+    private String billDesc;
 
-    private String desc;
-
-    public static UserBalanceBillEntity create() {
-        UserBalanceBillEntity entity = new UserBalanceBillEntity();
-        entity.setCompleteStatus(1); // 1 or 0
-        entity.setBalanceStatus(1); // 1 or 0
-        entity.setCancelStatus(0); // 0
-        entity.setCurrency("CNY");
-
-        return entity;
-    }
+//    public static UserBalanceBillEntity create() {
+//        UserBalanceBillEntity entity = new UserBalanceBillEntity();
+//        entity.setCompleteStatus(1); // 1 or 0
+//        entity.setBalanceStatus(1); // 1 or 0
+//        entity.setCancelStatus(0); // 0
+//        entity.setCurrency("CNY");
+//
+//        return entity;
+//    }
 
     public String getBillId() {
         return billId;
@@ -51,6 +51,14 @@ public class UserBalanceBillEntity extends Entity {
 
     public void setBillId(String billId) {
         this.billId = billId;
+    }
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
     }
 
     public String getAuthUid() {
@@ -125,35 +133,27 @@ public class UserBalanceBillEntity extends Entity {
         this.cancelStatus = cancelStatus;
     }
 
-    public Date getCompleteAt() {
-        return completeAt;
+    public Date getCompletedAt() {
+        return completedAt;
     }
 
-    public void setCompleteAt(Date completeAt) {
-        this.completeAt = completeAt;
+    public void setCompletedAt(Date completedAt) {
+        this.completedAt = completedAt;
     }
 
-    public int getType() {
-        return type;
+    public int getBillType() {
+        return billType;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setBillType(int billType) {
+        this.billType = billType;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public String getBillDesc() {
+        return billDesc;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setBillDesc(String billDesc) {
+        this.billDesc = billDesc;
     }
 }

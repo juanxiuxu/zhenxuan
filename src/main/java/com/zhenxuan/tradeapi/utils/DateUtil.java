@@ -101,4 +101,13 @@ public class DateUtil {
         return new Date(timestamp);
     }
 
+    /**
+     * unix timestamp to date
+     * @param unixTimestamp
+     * @return
+     */
+    public static Date convertTimestamp2Date(Long unixTimestamp) {
+        Long timestamp = unixTimestamp * 1000;
+        return new Date(timestamp);
+    }
 }

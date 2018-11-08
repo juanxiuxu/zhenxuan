@@ -25,11 +25,11 @@
         <result column="user_balance_consume" property="userBalanceConsume" />
         <result column="discount" property="discount" />
         <result column="paid_at" property="paidAt" />
-        <result column="_deleted" property="deleted" />
+        <result column="deleted" property="deleted" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        oid, auth_uid, tid, iuid, vip, order_status, balance_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount, paid_at, _deleted
+        oid, auth_uid, tid, iuid, vip, order_status, balance_status, code, op, recheck, total, goods_total, cashback, bonus, coupon_code, coupon_discount, freight, freight_discount, payment, user_balance_consume, discount, paid_at, deleted
     </sql>
 
     <sql id="insert_columns">
@@ -53,8 +53,8 @@
         <if test="payment != null">,payment</if>
         <if test="userBalanceConsume != null">,user_balance_consume</if>
         <if test="discount != null">,discount</if>
-        <if test="paid_at != 0">,paidAt</if>
-        <if test="_deleted != 0">,deleted</if>
+        <if test="paidAt != 0">,paidAt</if>
+        <if test="deleted != 0">,deleted</if>
     </sql>
 
 
@@ -79,8 +79,8 @@
         <if test="payment != null">payment</if>
         <if test="userBalanceConsume != null">userBalanceConsume</if>
         <if test="discount != null">discount</if>
-        <if test="paid_at != 0">,paidAt</if>
-        <if test="_deleted != 0">,deleted</if>
+        <if test="paidAt != 0">,paidAt</if>
+        <if test="deleted != 0">,deleted</if>
     </sql>
 
 
@@ -90,7 +90,7 @@
         from tbl_order
         <where>
             auth_uid = #{authUid,jdbcType=VARCHAR}
-            AND _deleted = 0
+            AND deleted = 0
         </where>
     </select>
 
@@ -120,7 +120,7 @@
     <update id="updateBalanceStatus">
         update tbl_order
         <set>
-            <if test="balanceStatus != 0">balance_status = #{newBalanceStatus,jdbcType=INTEGER}</if>
+            <if test="newBalanceStatus != 0">balance_status = #{newBalanceStatus,jdbcType=INTEGER}</if>
         </set>
         <where>
             oid = #{oid,jdbcType=VARCHAR}
@@ -147,8 +147,10 @@
             AND
             balance_status = #{balanceStatus,jdbcType=INTEGER}
             AND
-            paid_at between #{startPaidAt,jdbcType=BIGINT} AND #{endPaidAt,jdbcType=BIGINT}
-            AND _deleted = 0
+            <![CDATA[
+            paid_at >= #{startPaidAt,jdbcType=BIGINT} AND paid_at < #{endPaidAt,jdbcType=BIGINT}
+            ]]>
+            AND deleted = 0
         </where>
     </select>
 

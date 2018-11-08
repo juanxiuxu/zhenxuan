@@ -137,8 +137,19 @@
             balance = balance - #{amount,jdbcType=BIGINT}
         </set>
         <where>
-            auth_uid = #{auth_uid,jdbcType=VARCHAR}
+            auth_uid = #{authUid,jdbcType=VARCHAR}
             AND balance - #{amount,jdbcType=BIGINT} >= 0
+        </where>
+    </update>
+
+    <update id="increaseUserBalance"
+            parameterType="map">
+        update tbl_user_auth
+        <set>
+            balance = balance + #{amount,jdbcType=BIGINT}
+        </set>
+        <where>
+            auth_uid = #{authUid,jdbcType=VARCHAR}
         </where>
     </update>
 </mapper>

@@ -1,11 +1,14 @@
 package com.zhenxuan.tradeapi.schedule.job;
 
+import com.google.common.base.Throwables;
+import com.zhenxuan.tradeapi.common.enums.BalanceStatus;
 import com.zhenxuan.tradeapi.common.enums.OrderStatus;
 import com.zhenxuan.tradeapi.dao.entity.OrderEntity;
 import com.zhenxuan.tradeapi.dao.entity.UserBalanceBillEntity;
 import com.zhenxuan.tradeapi.dao.mapper.OrderMapper;
 import com.zhenxuan.tradeapi.dao.mapper.UserAuthMapper;
 import com.zhenxuan.tradeapi.dao.mapper.UserBalanceBillMapper;
+import com.zhenxuan.tradeapi.utils.DateUtil;
 import com.zhenxuan.tradeapi.utils.GlobalIdUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * 7天前的cashback打余额
+ * 7天之前的订单，按表里的tid，合并打余额，
  */
 @Service
-public class PushCashbackJob extends AbstractJob<OrderEntity> {
+public class PushCashbackJob extends BaseJob {
 
     private static final Logger logger = LoggerFactory.getLogger(PushCashbackJob.class);
 
@@ -37,68 +40,80 @@ public class PushCashbackJob extends AbstractJob<OrderEntity> {
     @Autowired
     private UserBalanceBillMapper userBalanceBillMapper;
 
-    @Override
-    protected void init() {
-        super.init();
-        logger.info("PushCashbackJob begin");
+    public static void main(String[] args) {
+        execute(args, PushCashbackJob.class);
+    }
 
+    @Override
+    public void doExecute(String[] args) {
         int orderStatus = OrderStatus.PAY_SUCCESS.code;
-        long endPaidAt = rangeDay * 24 * 3600;
-        long startPaidAt = endPaidAt + 24 * 3600;
-        List<OrderEntity> orderEntities = orderMapper.selectEntitiesByPaidAtRangeAndStatus(orderStatus, startPaidAt, endPaidAt);
-        setDataList(orderEntities);
-    }
+        int balanceStatus = BalanceStatus.UNKNOWN.code;
+//        long curTime = System.currentTimeMillis() / 1000;
+//        long endPaidAt = curTime - rangeDay * 24 * 3600;
+//        long startPaidAt = endPaidAt - 24 * 3600;
+        long endPaidAt = 1553426184;
+        long startPaidAt = 1541436184;
+        List<OrderEntity> orderEntities = orderMapper.selectEntitiesByPaidAtRangeAndStatus(
+                orderStatus, balanceStatus, startPaidAt, endPaidAt);
 
-    @Override
-    protected void destroy() {
-        super.destroy();
-        logger.info("PushCashbackJob end");
-    }
+        if (orderEntities != null) {
+            for (OrderEntity orderEntity : orderEntities) {
+                long cashback = orderEntity.getCashback();
+                if (cashback == 0) {
+                    continue;
+                }
 
-    @Override
-    protected void beforeJob(OrderEntity data) {
-    }
+                String orderId = orderEntity.getOid();
+                String uid = orderEntity.getAuthUid();
 
-    @Override
-    protected boolean doJob(OrderEntity data) {
-        String orderId = data.getOid();
-        long cashback = data.getCashback();
-        String uid = data.getAuthUid();
-
-        try {
-            pushCashback(uid, cashback, orderId);
-        } catch (Exception e) {
-            logger.error("push cashback is failed. uid:[{}], orderId:[{}], cashback:[{}]",
-                    uid, orderId, cashback);
-            return false;
+                try {
+                    pushCashback(uid, cashback, orderId, orderEntity);
+                } catch (Exception e) {
+                    logger.error("push cashback is failed. uid:[{}], orderId:[{}], cashback:[{}]. err:{}",
+                            uid, orderId, cashback, Throwables.getStackTraceAsString(e));
+                    continue;
+                }
+            }
         }
-
-        return true;
     }
 
     @Override
-    protected void afterJob(OrderEntity data) {
+    public void preExecute(String[] args) {
+        logger.info("PushCashbackJob begin");
+        super.preExecute(args);
+
+    }
+
+    @Override
+    public void afterExecute() {
+        logger.info("PushCashbackJob end");
+        super.afterExecute();
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void pushCashback(String uid, long cashback, String orderId) {
+    public void pushCashback(String uid, long cashback, String orderId, OrderEntity orderEntity) {
         userAuthMapper.increaseUserBalance(uid, cashback);
 
         UserBalanceBillEntity billEntity = new UserBalanceBillEntity();
         billEntity.setBillId(GlobalIdUtil.newOrderId());
-        billEntity.setOrderId(orderId);
+        billEntity.setOid(orderId);
         billEntity.setAuthUid(uid);
         billEntity.setAmount(cashback);
         billEntity.setIncome(1);
-        // TODO
+        billEntity.setCompleteStatus(1); // 1 or 0
+        billEntity.setBalanceStatus(1); // 1 or 0
+        billEntity.setCancelStatus(0); // 0
+        billEntity.setCompletedAt(DateUtil.convertTimestamp2Date(orderEntity.getPaidAt()));
+        billEntity.setBillDesc("订单分润");
+        billEntity.setBillType(1); // TODO
         userBalanceBillMapper.insertEntity(billEntity);
 
-        int oldOrderStatus = OrderStatus.PAY_SUCCESS.code;
-        int newOrderStatus = OrderStatus.PUSH_CASHBACK_FINISH.code;
-        int upResult = orderMapper.updateOrderState(orderId, oldOrderStatus, newOrderStatus, System.currentTimeMillis() / 1000);
+        int oldStatus = BalanceStatus.UNKNOWN.code;
+        int newStatus = BalanceStatus.CASHBACK_PUSHED.code;
+        int upResult = orderMapper.updateBalanceStatus(orderId, oldStatus, newStatus);
         if (upResult == 0) {
-            logger.error("no order to update status. orderId:{}", orderId);
-            throw new RuntimeException("no order to update status");
+            logger.error("no order to update balance status. orderId:{}", orderId);
+            throw new RuntimeException("no order to update balance status");
         }
     }
 }
