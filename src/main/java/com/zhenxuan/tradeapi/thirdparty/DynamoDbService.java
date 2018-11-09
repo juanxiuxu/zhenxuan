@@ -1,5 +1,6 @@
 package com.zhenxuan.tradeapi.thirdparty;
 
+import com.alibaba.fastjson.JSONObject;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -28,6 +29,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import static com.zhenxuan.tradeapi.utils.JsonUtil.convert;
 
 /**
  * aws dynamodb services
@@ -256,6 +259,7 @@ public class DynamoDbService {
 
         testEnv(dynamoDbService, isProductEnv);
         testShipping(dynamoDbService);
+        MockProdGoodsSpuItem(dynamoDbService);
     }
 
     private static void testEnv(DynamoDbService dynamoDbService, boolean isProductEnv) {
@@ -278,7 +282,7 @@ public class DynamoDbService {
         if (item == null) {
             return;
         }
-        System.out.printf("shopitem=%s", item.toString());
+        System.out.printf("shopitem=%s\n", item.toString());
     }
 
     private static void testShipping(DynamoDbService dynamoDbService) {
@@ -307,6 +311,67 @@ public class DynamoDbService {
         dynamoDbService.write(spuItem);
 
         GoodsSpuItem spuItemRead = dynamoDbService.read(GoodsSpuItem.class, "spuid1", "0", true);
-        System.out.printf("%s", JsonUtil.toString(spuItemRead));
+        System.out.printf("%s\n", JsonUtil.toString(spuItemRead));
+
+
+
+    }
+
+    private static void MockProdGoodsSpuItem(DynamoDbService dynamoDbService) {
+        GoodsSpuItem spuItem = new GoodsSpuItem();
+        spuItem.setSpuId("9a34d393f279f4ba");
+        spuItem.setSkuId("0");
+
+        List<GoodsSkuInfo> skuInfos = new LinkedList<>();
+        GoodsSkuInfo skuInfo1 = new GoodsSkuInfo();
+        skuInfo1.setSkuId("9a34d393f279f4ba-1");
+        skuInfo1.setSalesCount(3);
+        skuInfo1.setStockCount(964);
+        skuInfo1.setCashback(19);
+        int price = 209;
+        skuInfo1.setPrice((float)price);
+        skuInfo1.setShow(true);
+        skuInfo1.setWeight(300);
+        skuInfo1.setSpuId("9a34d393f279f4ba");
+        skuInfos.add(skuInfo1);
+
+        GoodsSkuInfo skuInfo2 = new GoodsSkuInfo();
+        skuInfo2.setSkuId("9a34d393f279f4ba-2");
+        skuInfo2.setSalesCount(4);
+        skuInfo2.setShow(true);
+        price = 209;
+        skuInfo2.setPrice((float)price);
+        skuInfo2.setCashback(28);
+        skuInfo2.setStockCount(949);
+        skuInfo2.setSpuId("9a34d393f279f4ba");
+        skuInfo2.setWeight(300);
+        skuInfos.add(skuInfo2);
+        spuItem.setSkuInfos(skuInfos);
+
+        List<Map<String, Integer>> shippingInfos = new LinkedList<>();
+        Map<String, Integer> shippingInfo1 = ImmutableMap.of("新疆维吾尔自治区", 100, "内蒙自治区", -1);
+        shippingInfos.add(shippingInfo1);
+        Map<String, Integer> shippingInfo2 = ImmutableMap.of("陕西-西安", 103, "天津", -1);
+        shippingInfos.add(shippingInfo2);
+        spuItem.setShippingInfos(shippingInfos);
+
+        dynamoDbService.write(spuItem);
+
+        GoodsSpuItem spuItemRead = dynamoDbService.read(GoodsSpuItem.class, "9a34d393f279f4ba", "0", true);
+
+        List<GoodsSkuInfo> l = spuItemRead.getSkuInfos();
+
+        System.out.printf("goodsskuinfo size is %d\n", l.size());
+        for(int i=0; i < l.size(); i++)
+        {
+            GoodsSkuInfo goodsSkuInfo = JsonUtil.toObject(JsonUtil.toString(l.get(i)), GoodsSkuInfo.class);
+            System.out.printf("getGoodsSkuinfo %s %d\n", goodsSkuInfo.getSpuId(), goodsSkuInfo.getStockCount());
+        }
+
+    //   List<GoodsSkuInfo> l2 = JsonUtil.convert()
+
+      //  System.out.printf("%s\n", JsonUtil.toString(spuItemRead));
+
+
     }
 }

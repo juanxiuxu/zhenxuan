@@ -165,12 +165,23 @@ public class OrderServiceImpl implements OrderService {
         spuInfo.setSpuId(spuItem.getSpuId());
         spuInfo.setSpuName(spuItem.getSpuName());
         spuInfo.setOp(spuItem.getOp());
-        spuInfo.setSkuInfos(Maps.uniqueIndex(spuItem.getSkuInfos(), new Function<GoodsSkuInfo, String>(){
+
+        Map<String, GoodsSkuInfo> goodsSkuInfoMap = new HashMap<String, GoodsSkuInfo>();
+        List<GoodsSkuInfo> goodsSkuInfoList = spuItem.getSkuInfos();
+        for(int i=0; i < goodsSkuInfoList.size(); i++)
+        {
+            GoodsSkuInfo goodsSkuInfo = JsonUtil.toObject(JsonUtil.toString(goodsSkuInfoList.get(i)), GoodsSkuInfo.class);
+            //System.out.printf("getGoodsSkuinfo %s %d\n", goodsSkuInfo.getSpuId(), goodsSkuInfo.getStockCount());
+            goodsSkuInfoMap.put(goodsSkuInfo.getSkuId(), goodsSkuInfo);
+        }
+
+       /*spuInfo.setSkuInfos(Maps.uniqueIndex(spuItem.getSkuInfos(), new Function<GoodsSkuInfo, String>(){
             @Override
             public String apply(GoodsSkuInfo goodsSkuInfo) {
                 return goodsSkuInfo.getSkuId();
             }
         }));
+    */
         List<Map<String, Integer>> shippingInfos = spuItem.getShippingInfos();
         if (shippingInfos != null) {
             Map<String, Integer> shippings = new HashMap<>();
@@ -187,7 +198,7 @@ public class OrderServiceImpl implements OrderService {
 
     // 从dynamo db获取sku信息
     private GoodsSkuInfo getSkuInfo(GoodsSpuInfo spuInfo, String skuId) {
-        String spuId = spuInfo.getSpuId();
+        /*String spuId = spuInfo.getSpuId();
 
         List<GoodsSkuItem> skuItems = dynamoDbService.query(GoodsSkuItem.class, "gid", spuId, "sid", spuId + "-", DynamoDbService.QueryOp.BeginWith, true);
         if (CollectionUtils.isEmpty(skuItems)) {
@@ -208,7 +219,16 @@ public class OrderServiceImpl implements OrderService {
                     return skuInfo;
                 }
             }
+        }*/
+
+
+        Map<String, GoodsSkuInfo> goodsSkuInfoMap = spuInfo.getSkuInfos();
+        if (goodsSkuInfoMap.containsKey(skuId)) {
+            GoodsSkuInfo goodsSkuInfo =  goodsSkuInfoMap.get(skuId);
+            return goodsSkuInfo;
         }
+
+        
 
         return null;
     }

@@ -48,31 +48,27 @@
         <if test="iuid != null">,iuid</if>
         <if test="evaStatus != null">,eva_status</if>
         <if test="commentId != null">,comment_id</if>
-        create_time,
-        update_time
     </sql>
 
-    <sql id="insert_values">
-        <if test="orderItemId != null">orderItemId</if>
-        <if test="oid != null">oid</if>
-        <if test="authUid != null">authUid</if>
-        <if test="op != null">op</if>
-        <if test="sid != null">sid</if>
-        <if test="barcode != null">barcode</if>
-        <if test="spuId != null">spuId</if>
-        <if test="spuName != null">spuName</if>
-        <if test="skuName != null">skuName</if>
-        <if test="cover != null">cover</if>
-        <if test="num != null">num</if>
-        <if test="unitPrice != null">unitPrice</if>
-        <if test="code != null">code</if>
-        <if test="rNum != null">rNum</if>
-        <if test="tid != null">tid</if>
-        <if test="iuid != null">iuid</if>
-        <if test="evaStatus != null">evaStatus</if>
-        <if test="commentId != null">commentId</if>
-        now()
-        now()
+      <sql id="insert_values">
+        <if test="orderItemId != null">#{orderItemId, jdbcType=VARCHAR}</if>
+        <if test="oid != null">,#{oid, jdbcType=VARCHAR}</if>
+        <if test="authUid != null">,#{authUid, jdbcType=VARCHAR}</if>
+        <if test="op != null">,#{op, jdbcType=VARCHAR}</if>
+        <if test="sid != null">,#{sid, jdbcType=VARCHAR}</if>
+        <if test="barcode != null">,#{barcode, jdbcType=VARCHAR}</if>
+        <if test="spuId != null">,#{spuId, jdbcType=VARCHAR}</if>
+        <if test="spuName != null">,#{spuName, jdbcType=VARCHAR}</if>
+        <if test="skuName != null">,#{skuName, jdbcType=VARCHAR}</if>
+        <if test="cover != null">,#{cover, jdbcType=VARCHAR}</if>
+        <if test="num != null">,#{num, jdbcType=INTEGER}</if>
+        <if test="unitPrice != null">,#{unitPrice, jdbcType=INTEGER}</if>
+        <if test="code != null">, #{code, jdbcType=INTEGER}</if>
+        <if test="rNum != null">,#{rNum, jdbcType=INTEGER}</if>
+        <if test="tid != null">,#{tid, jdbcType=VARCHAR}</if>
+        <if test="iuid != null">,#{iuid, jdbcType=VARCHAR}</if>
+        <if test="evaStatus != null">, #{evaStatus, jdbcType=INTEGER}</if>
+        <if test="commentId != null">, #{commentId, jdbcType=VARCHAR}</if>
     </sql>
 
     <select id="selectEntityByOid" resultMap="BaseResultMap">

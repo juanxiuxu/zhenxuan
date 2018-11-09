@@ -59,26 +59,26 @@
 
 
     <sql id="insert_values">
-        <if test="oid != null">oid</if>
-        <if test="authUid != null">authUid</if>
-        <if test="tid != null">tid</if>
-        <if test="iuid != null">iuid</if>
-        <if test="vip != null">vip</if>
-        <if test="orderStatus != 0">orderStatus</if>
-        <if test="balanceStatus != 0">balanceStatus</if>
-        <if test="code != null">code</if>
-        <if test="op != null">op</if>
-        <if test="recheck != null">recheck</if>
-        <if test="total != null">total</if>
-        <if test="goodsTotal != null">goodsTotal</if>
-        <if test="cashback != null">cashback</if>
-        <if test="bonus != null">bonus</if>
-        <if test="couponCode != null">couponCode</if>
-        <if test="freight != null">freight</if>
-        <if test="freightDiscount != null">freightDiscount</if>
-        <if test="payment != null">payment</if>
-        <if test="userBalanceConsume != null">userBalanceConsume</if>
-        <if test="discount != null">discount</if>
+        <if test="oid != null">#{oid, jdbcType=VARCHAR}</if>
+        <if test="authUid != null">,#{authUid, jdbcType=VARCHAR}</if>
+        <if test="tid != null">,#{tid, jdbcType=VARCHAR}</if>
+        <if test="iuid != null">,#{iuid, jdbcType=VARCHAR}</if>
+        <if test="vip != null">,#{vip, jdbcType=INTEGER}</if>
+        <if test="orderStatus != 0">,#{orderStatus, jdbcType=INTEGER}</if>
+        <if test="balanceStatus != 0">#{balanceStatus, jdbctype=INTEGER}</if>
+        <if test="code != null">,#{code, jdbcType=VARCHAR}</if>
+        <if test="op != null">,#{op, jdbcType=VARCHAR}</if>
+        <if test="recheck != null">,#{recheck, jdbcType=VARCHAR}</if>
+        <if test="total != null">,#{total, jdbcType=INTEGER}</if>
+        <if test="goodsTotal != null">,#{goodsTotal, jdbcType=INTEGER}</if>
+        <if test="cashback != null">,#{cashback, jdbcType=INTEGER}</if>
+        <if test="bonus != null">,#{bonus, jdbcType=INTEGER}</if>
+        <if test="couponCode != null">,#{couponCode, jdbcType=VARCHAR}</if>
+        <if test="freight != null">,#{freight, jdbcType=INTEGER}</if>
+        <if test="freightDiscount != null">,#{freightDiscount, jdbcType=INTEGER}</if>
+        <if test="payment != null">,#{payment, jdbcType=INTEGER}</if>
+        <if test="userBalanceConsume != null">,#{userBalanceConsume, jdbcType=INTEGER}</if>
+        <if test="discount != null">,#{discount, jdbcType=INTEGER}</if>
         <if test="paidAt != 0">,paidAt</if>
         <if test="deleted != 0">,deleted</if>
     </sql>
